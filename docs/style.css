@@ -1,0 +1,69 @@
+/* Layout: one grid. Rows are the taxonomy (an indented tree, sticky on the left); columns are time, newest first (sticky header on top).
+   Color only says which top-level category a row belongs to: the bar at the left of each row and the top-level name. */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1d2129; --muted:#6b7280; --faint:#9ca3af; --line:#e5e7eb; --band:#fafbfc; --hover:#f1f3f6;
+  --c0:#1d7473; --c1:#b04f2c; --c2:#6a4ea3; --c3:#94700f; --c4:#2d62a3; --c5:#47782f; --c6:#a33c61; --c7:#56606d;
+  --font:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --labelW:240px; --colW:148px; --minW:96px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --surface:#181b21; --ink:#e7e9ee; --muted:#9aa1ad; --faint:#6b7280; --line:#2a2e36; --band:#15181d; --hover:#22262e;
+  --c0:#5fb9b6; --c1:#e48b65; --c2:#ab95de; --c3:#d6af4d; --c4:#7ca8e5; --c5:#90c171; --c6:#e281a4; --c7:#a3adba; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#181b21; --ink:#e7e9ee; --muted:#9aa1ad; --faint:#6b7280; --line:#2a2e36; --band:#15181d; --hover:#22262e;
+  --c0:#5fb9b6; --c1:#e48b65; --c2:#ab95de; --c3:#d6af4d; --c4:#7ca8e5; --c5:#90c171; --c6:#e281a4; --c7:#a3adba; color-scheme:dark}
+
+html,body{background:var(--bg);color:var(--ink);height:100%}
+body{font-family:var(--font);font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;box-sizing:border-box;display:flex;flex-direction:column}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--c4);outline-offset:1px}
+
+/* Top bar */
+.top{display:flex;align-items:center;gap:8px 20px;flex-wrap:wrap;margin-bottom:12px}
+h1{font-size:20px;font-weight:700;letter-spacing:.01em;margin:0}
+.ctl{display:flex;align-items:center;gap:12px;margin-left:auto}
+.range{display:flex;gap:2px;padding:2px;border-radius:7px;background:var(--hover);font-size:13px}
+.range button{padding:3px 10px;border-radius:5px;color:var(--muted)}
+.range button:hover{color:var(--ink)}
+.range button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.lang{font-size:13px;border:1px solid var(--line);border-radius:6px;padding:3px 10px;color:var(--muted);background:var(--surface)}
+.lang:hover{color:var(--ink)}
+
+/* Grid */
+.view{flex:1;min-height:320px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);position:relative}
+.grid{display:grid;width:max-content;min-width:100%}
+.grid.fit{width:auto}
+.hcell{position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--line);height:46px;box-sizing:border-box;padding:7px 12px;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.hcell b{display:block;color:var(--ink);font-size:13px;font-weight:600;line-height:1.3}
+.hcell.fold{cursor:pointer;color:var(--muted)}
+.hcell.fold:hover b{text-decoration:underline;text-underline-offset:3px}
+.corner{position:sticky;left:0;top:0;z-index:3;background:var(--surface);border-bottom:1px solid var(--line);border-right:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 10px}
+.pg{font-size:12px;color:var(--muted);padding:4px 8px;border-radius:6px}
+.pg:hover:not(:disabled){background:var(--hover);color:var(--ink)}
+.pg:disabled{color:var(--line);cursor:default}
+.label{position:sticky;left:0;z-index:1;background:var(--surface);border-right:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:inset 3px 0 0 var(--gc);display:flex;align-items:flex-start;padding:9px 10px 9px 0;box-sizing:border-box;min-width:0}
+.label .caret{flex:none;width:18px;height:22px;color:var(--faint);font-size:10px;line-height:22px;text-align:center}
+.label .name{min-width:0;text-align:left;line-height:1.4;padding:1px 4px;border-radius:4px}
+button.name:hover{background:var(--hover)}
+.label .name .c{color:var(--faint);font-size:12px;font-weight:400;margin-left:6px}
+.d1 .name{font-weight:700}
+.d1 .name .t{color:var(--gc)}
+.cell{border-bottom:1px solid var(--line);padding:9px 8px;box-sizing:border-box;display:flex;flex-direction:column;gap:5px;min-width:0}
+.g0{border-top:1px solid color-mix(in srgb,var(--ink) 22%,var(--surface))}
+
+/* Papers: outline = paper; tinted fill = most cited within its category */
+.chip{transition:opacity .12s,background-color .12s;display:flex;align-items:center;min-height:24px;box-sizing:border-box;padding:3px 9px;border-radius:6px;background:var(--surface);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:12px;line-height:1.3}
+.chip span{min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.chip:hover{border-color:color-mix(in srgb,var(--gc) 55%,var(--line))}
+.chip.key{background:color-mix(in srgb,var(--gc) 15%,var(--surface));border-color:color-mix(in srgb,var(--gc) 40%,var(--surface));font-weight:600}
+
+/* Selection: the clicked paper is solid, upstream is tinted, downstream is dashed, everything else fades */
+.grid.focus .chip{opacity:.25;background:var(--surface);border-color:var(--line);font-weight:400}
+.grid.focus .chip.up{opacity:1;background:color-mix(in srgb,var(--gc) 14%,var(--surface));border-color:var(--gc)}
+.grid.focus .chip.down{opacity:1;border:1px dashed var(--gc)}
+.grid.focus .chip.sel{opacity:1;background:var(--gc);border-color:var(--gc);color:var(--surface);font-weight:600}
+
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:7px 11px;border-radius:6px;max-width:420px;white-space:pre-line;z-index:20;line-height:1.55;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.err{color:var(--c1)}
+@media (max-width:640px){:root{--labelW:150px;--colW:128px}.top{gap:8px 12px}h1{font-size:17px}.ctl{gap:8px}.range button{padding:3px 8px}.lang{padding:3px 8px}.chip span{-webkit-line-clamp:3}}

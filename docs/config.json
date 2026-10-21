@@ -1,0 +1,11 @@
+{
+ "taxonomy": "taxonomy.json",
+ "papers": "papers.json",
+ "lang": "zh",
+ "recent_months": 12,
+ "cites": "cites.json",
+ "key": {
+  "min": 2,
+  "max": 2
+ }
+}

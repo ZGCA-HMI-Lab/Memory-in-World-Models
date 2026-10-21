@@ -1,0 +1,102 @@
+{
+  "title": "Memory in World Models",
+  "title_zh": "世界模型记忆",
+  "children": [
+    {
+      "name": "Memory Representation",
+      "name_zh": "记忆表示",
+      "children": [
+        {
+          "name": "Visual Memory",
+          "name_zh": "视觉记忆",
+          "code": "MR.Visual",
+          "children": []
+        },
+        {
+          "name": "Implicit State Memory",
+          "name_zh": "隐式状态记忆",
+          "code": "MR.Implicit",
+          "children": []
+        },
+        {
+          "name": "Explicit State Memory",
+          "name_zh": "显式状态记忆",
+          "code": "MR.Explicit",
+          "children": []
+        },
+        {
+          "name": "Adaptive Parametric Memory",
+          "name_zh": "自适应参数记忆",
+          "code": "MR.Param",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Memory Operations",
+      "name_zh": "记忆操作",
+      "children": [
+        {
+          "name": "Memory Management",
+          "name_zh": "记忆管理",
+          "code": "MO.Manage",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Memory Learning",
+      "name_zh": "记忆学习",
+      "children": [
+        {
+          "name": "Learning Objectives",
+          "name_zh": "学习目标",
+          "code": "ML.Objective",
+          "children": []
+        },
+        {
+          "name": "Memory State Distribution",
+          "name_zh": "记忆状态分布",
+          "code": "ML.Dist",
+          "children": []
+        },
+        {
+          "name": "Memory-Aware Learning",
+          "name_zh": "记忆感知学习",
+          "code": "ML.Aware",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Memory Evaluation",
+      "name_zh": "记忆评测",
+      "code": "ME",
+      "children": []
+    },
+    {
+      "name": "Memory Applications",
+      "name_zh": "记忆应用",
+      "children": [
+        {
+          "name": "Video World Models",
+          "name_zh": "视频世界模型",
+          "code": "MA.Video",
+          "children": []
+        },
+        {
+          "name": "World Action Models",
+          "name_zh": "世界动作模型",
+          "code": "MA.WA",
+          "children": []
+        },
+        {
+          "name": "Navigation World Models",
+          "name_zh": "导航世界模型",
+          "code": "MA.Nav",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
