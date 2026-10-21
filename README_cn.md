@@ -49,7 +49,6 @@
 | [MR.Visual.29] | ShotStream: Streaming Multi-Shot Video Generation for Interactive Storytelling — Ya-Wen Luo et al. | 记忆 | 把多镜头视频生成改写为以历史镜头为条件的逐镜头因果生成，用全局缓存保留历史镜头的条件帧、局部缓存保留当前镜头已生成帧，并以两阶段自强制蒸馏缓解误差累积。　相关：记忆管理、记忆状态分布 | arXiv 2026 | [论文](https://arxiv.org/abs/2603.25746) |
 | [MR.Visual.28] | StoryMem: Multi-shot Long Video Storytelling with Memory — Kai-Wen Zhang et al. | 记忆 | 把长篇故事视频改写为以显式视觉记忆为条件的逐镜头生成，维护由历史镜头关键帧组成、动态更新的紧凑记忆库，经潜变量拼接与负向RoPE偏移注入单镜头视频扩散模型，并以语义关键帧选择和美学过滤决定记忆内容。　相关：记忆管理 | arXiv 2025 | [论文](https://arxiv.org/abs/2512.19539) |
 | [MR.Visual.27] | Generative View Stitching — C. Song et al. | 记忆 | 对预设相机轨迹的整段视频并行采样，把扩散拼接推广到用Diffusion Forcing训练的现成视频模型，并以同时依赖过去与未来的Omni Guidance和闭环机制保持长程一致。 | arXiv 2025 | [论文](https://arxiv.org/abs/2510.24718) |
-| [MR.Visual.26] | CausNVS: Autoregressive Multi-view Diffusion for Flexible 3D Novel View Synthesis — Xin Kong et al. | 记忆 · 世界模型 | 以因果掩码和逐帧噪声训练自回归多视图扩散模型，用相对位姿编码控制相机，推理时保留位姿空间中最近视角的KV缓存作为空间记忆来抑制漂移。　相关：隐式状态记忆、记忆管理 | arXiv 2025 | [论文](https://arxiv.org/abs/2509.06579) |
 | [MR.Visual.25] | StarGen: A Spatiotemporal Autoregression Framework with Video Diffusion Model for Scalable and Controllable Scene Generation — Shangjin Zhai et al. | 记忆 · 世界模型 | 用预训练视频扩散模型自回归生成大范围场景，每段以空间相邻图像的三维变换和与上一段时间重叠的图像为条件，保持位姿可控下的长程一致。 | arXiv 2025 | [论文](https://arxiv.org/abs/2501.05763) |
 | [MR.Visual.24] | OneStory: Coherent Multi-Shot Video Generation with Adaptive Memory — Zhao-Chong An et al. | 记忆 | 把多镜头视频生成改写为逐镜头的自回归生成，从先前镜头中挑选语义相关的信息帧构成全局记忆，再按重要性分块压缩为紧凑上下文作条件。　相关：记忆管理 | arXiv 2025 | [论文](https://arxiv.org/abs/2512.07802) |
 | [MR.Visual.23] | ActionRoPE: action as coordinates for spatially consistent control in planar-camera game world models — Zhi-Yang Deng et al. | 记忆 · 世界模型 | 面向俯视、等距等平面相机游戏，把动作引起的相机位移转为世界坐标下的旋转位置编码，使同一世界位置的token在不同时刻保持相同位置地址，并按已观测区域与新暴露区域分配逐token去噪调度。 | arXiv 2026 | [论文](https://arxiv.org/abs/2610.25861) |
@@ -79,6 +78,7 @@
 
 | 编号 | 论文 | 标签 | TL;DR（一句话） | 发表 | 资源 |
 |---|---|---|---|---:|---|
+| [MR.Implicit.50] | CausNVS: Autoregressive Multi-view Diffusion for Flexible 3D Novel View Synthesis — Xin Kong et al. | 记忆 · 世界模型 | 以因果掩码和逐帧噪声训练自回归多视图扩散模型，用相对位姿编码控制相机，推理时保留位姿空间中最近视角的KV缓存作为空间记忆来抑制漂移。　相关：记忆管理 | arXiv 2025 | [论文](https://arxiv.org/abs/2509.06579) |
 | [MR.Implicit.49] | MV-Forcing: Long Multi-View Video Generation via 4D-Grounded Spatio-Temporal Self-Forcing — Gal Fiebelman et al. | 记忆 · 世界模型 | 在单个扩散模型中组合时间与视角两种自回归，用自回归三维重建模型累积所有已生成视角的持久状态并渲染下一视角的几何先验，再以时空Self-Forcing蒸馏缓解曝光偏差。　相关：显式状态记忆、记忆状态分布 | arXiv 2026 | [论文](https://arxiv.org/abs/2607.05376) |
 | [MR.Implicit.48] | FlowMo-WM: A World Model with Object Momentum and Hidden Ambient Drift — Yi-Tao Jiang et al. | 记忆 · 世界模型 · 具身 | 动作条件潜空间世界模型，把图像-动作历史分解为概括物体运动的短历史潜状态和概括水流、风等缓变隐藏扰动的长历史上下文，并用零上下文残差转移分离动作驱动的基础动力学与漂移效应。 | arXiv 2026 | [论文](https://arxiv.org/abs/2606.13817) |
 | [MR.Implicit.47] | Echo-Infinity: Learning Evolving Memory for Real-Time Infinite Video Generation — Yuxuan Bian et al. | 记忆 | 用可学习的记忆查询在帧移出局部窗口时经注意力与门控更新，把任意长的历史压缩为恒定开销的演化记忆，并统一相对RoPE方案以消除位置外推差距。　相关：记忆管理、记忆感知学习 | arXiv 2026 | [论文](https://arxiv.org/abs/2606.04527) |
@@ -281,7 +281,6 @@
 | [ME.32] | Scaling Video Generation for Reasoning: At What Cost? — Wei-Hang Guo et al. | 记忆 · 世界模型 | 构建二阶魔方基准，固定视角只看到三个面，要求视频模型预测一串指定转动后的画面以检验其能否推断被遮挡面的状态，并研究模型规模、计算量与符号状态监督的影响。　相关：学习目标 | arXiv 2026 | [论文](https://arxiv.org/abs/2609.36599) |
 | [ME.31] | HappyWorld-Bench — Zhi-Qi Bai et al. | 记忆 · 世界模型 · 具身 | 按从生成构建到统一世界建模的六级能力框架，分视频、空间与具身世界模型三条赛道评测生成世界在探索、交互与修改下的可靠性，结合人类对比Elo与自动指标，考察长推演与重访中的一致性及多步动作下的状态保持。　相关：视频世界模型、世界动作模型 | arXiv 2026 | [论文](https://arxiv.org/abs/2609.24308) |
 | [ME.30] | WorldExam: Benchmarking World Models from Apparent Appearance to Inherent Reactivity — Yuxue Yang et al. | 记忆 · 世界模型 | 面向可控视频世界模型的分层诊断基准，涵盖画质、控制遵循、空间一致与世界反应四层，其中场景重访用往返相机运动检验模型对初始观测的空间记忆。　相关：视频世界模型 | arXiv 2026 | [论文](https://arxiv.org/abs/2608.02603) |
-| [ME.29] | GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation — GigaWorld Team et al. | 记忆 · 世界模型 · 具身 | 用真实遥操作数据与配对策略回放构建WMBench，系统比较视频世界模型的模型族、动作编码、记忆设计和后训练对策略评估可靠性的影响，并据此构建面向策略评估的世界模型GigaWorld-1。　相关：视频世界模型 | arXiv 2026 | [论文](https://arxiv.org/abs/2607.02642) |
 | [ME.28] | World Consistency Score: A Unified Metric for Video Generation Quality — Akshat Rakheja et al. | 记忆 | 提出生成视频的世界一致性指标，组合物体恒存、关系稳定、因果合规与闪烁惩罚四个子项，并用人类偏好数据学习权重。 | arXiv 2025 | [论文](https://arxiv.org/abs/2508.00144) |
 | [ME.27] | Error Analyses of Auto-Regressive Video Diffusion Models: A Unified Framework — Jing Wang et al. | 记忆 · 世界模型 | 建立自回归视频扩散模型的统一误差分析框架，用条件互信息刻画历史遗忘、用逐步误差累积刻画时序退化，并在DMLab与Minecraft中提出大海捞针式的历史检索评测。　相关：视觉记忆、记忆管理 | arXiv 2025 | [论文](https://arxiv.org/abs/2503.10704) |
 | [ME.26] | Toward Stable World Models: Measuring and Addressing World Instability in Generative Environments — Soonwoo Kwon et al. | 记忆 · 世界模型 | 提出世界稳定性评测，让世界模型执行一串动作后再执行逆动作回到起始视角，比较首尾观测的一致性，并探索若干提升稳定性的策略。　相关：视频世界模型 | arXiv 2025 | [论文](https://arxiv.org/abs/2503.08122) |
@@ -317,6 +316,7 @@
 
 | 编号 | 论文 | 标签 | TL;DR（一句话） | 发表 | 资源 |
 |---|---|---|---|---:|---|
+| [MA.Video.50] | GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation — GigaWorld Team et al. | 记忆 · 世界模型 · 具身 | 用真实遥操作数据与配对策略回放构建WMBench，系统比较视频世界模型的模型族、动作编码、记忆设计和后训练对策略评估可靠性的影响，并据此构建面向策略评估的世界模型GigaWorld-1。 | arXiv 2026 | [论文](https://arxiv.org/abs/2607.02642) |
 | [MA.Video.49] | Matrix-Game 4.0: Harnessing Video Models for Real-Time Playable Game Worlds — Ji-Hai Zhang et al. | 记忆 · 世界模型 | 由轻量游戏引擎维护世界状态并执行规则，自回归视频渲染器以引擎渲染的低模代理、动态描述和记忆参考为条件生成高保真画面，实现实时可玩的游戏世界。　相关：显式状态记忆、视觉记忆 | arXiv 2026 | [论文](https://arxiv.org/abs/2610.27999) |
 | [MA.Video.48] | RIGen: Beyond Action Following with Reciprocal Interaction in Generative Gameplay — Meng-Fei Li et al. | 记忆 · 世界模型 | 在生成式游戏中维护持久的游戏状态与可配置规则，结合上下文交互推理与动作条件音视频生成，使玩家动作的后果和角色行为共同决定后续画面。　相关：显式状态记忆 | arXiv 2026 | [论文](https://arxiv.org/abs/2610.20811) |
 | [MA.Video.47] | WorldGuide: Goal-Directed Video World Model for Procedural Task Execution — Ankan Deria et al. | 记忆 · 世界模型 · 具身 | 把程序性视频生成做成闭环任务执行：规划器根据已生成画面选下一原子动作或终止，执行器生成对应片段，并用近细远粗的分层视觉记忆控制历史开销。　相关：记忆管理、世界动作模型 | arXiv 2026 | [论文](https://arxiv.org/abs/2610.12459) |

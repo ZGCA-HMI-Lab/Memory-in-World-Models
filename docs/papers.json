@@ -3958,7 +3958,7 @@
  },
  {
   "id": "2509.06579",
-  "tag": "MR.Visual.26",
+  "tag": "MR.Implicit.50",
   "title": "CausNVS: Autoregressive Multi-view Diffusion for Flexible 3D Novel View Synthesis",
   "short": "CausNVS",
   "authors": "Xin Kong et al.",
@@ -4893,7 +4893,7 @@
  },
  {
   "id": "2607.02642",
-  "tag": "ME.29",
+  "tag": "MA.Video.50",
   "title": "GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation",
   "short": "GigaWorld-1",
   "authors": "GigaWorld Team et al.",

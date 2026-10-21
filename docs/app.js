@@ -2,14 +2,15 @@
 // 所有分类、名称和论文都从 config.json 指向的数据文件读取，页面不写死内容。
 
 const UI = {
-  zh: { other: "EN", load: "数据加载失败：", ranges: { "6": "近半年", "12": "近一年", all: "全部" },
-        newer: "更新", earlier: "更早", themes: { auto: "跟随系统", light: "浅色", dark: "深色" }, cited: n => `被引 ${n} 次（Semantic Scholar）`, more: n => `+${n}`, groupTip: "展开这一类", yearTip: "展开这一年", yearCount: n => `${n} 篇`, older: n => `${n} 篇 · 点击展开`, fold: "收起", year: y => `${y} 年`, mon: m => `${m}月`, noMonth: "未注明月份", keyTip: n => `本月同类被引最多（${n} 次）` },
-  en: { other: "中文", load: "Could not load data: ", ranges: { "6": "6 months", "12": "1 year", all: "All" },
-        newer: "Newer", earlier: "Older", themes: { auto: "Auto", light: "Light", dark: "Dark" }, cited: n => `Cited by ${n} (Semantic Scholar)`, more: n => `+${n}`, groupTip: "Expand this category", yearTip: "Expand this year", yearCount: n => `${n} papers`, older: n => `${n} papers · expand`, fold: "Collapse", year: y => y, mon: m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1], noMonth: "No month", keyTip: n => `Most cited in its category this month (${n})` },
+  zh: { load: "数据加载失败：", required: "记忆为必选标签", paper: "阅读论文", other: "EN", time: "时间", appearance: "外观", language: "语言", tags: "调研标签", summary: "研究内容", citations: "被引", ranges: { "6": "近半年", "12": "近一年", all: "全部" },
+        newer: "更新", earlier: "更早", themes: { auto: "跟随系统", light: "浅色", dark: "深色" }, more: n => `+${n}`, groupTip: "展开这一类", yearTip: "展开这一年", yearCount: n => `${n} 篇`, older: n => `${n} 篇 · 点击展开`, fold: "收起", year: y => `${y} 年`, mon: m => `${m}月`, noMonth: "未注明月份", keyTip: n => `本月同类被引最多（${n} 次）` },
+  en: { load: "Could not load data: ", required: "Memory is required", paper: "Read paper", other: "中文", time: "Time", appearance: "Theme", language: "Language", tags: "Research tags", summary: "Overview", citations: "Citations", ranges: { "6": "6 months", "12": "1 year", all: "All" },
+        newer: "Newer", earlier: "Older", themes: { auto: "Auto", light: "Light", dark: "Dark" }, more: n => `+${n}`, groupTip: "Expand this category", yearTip: "Expand this year", yearCount: n => `${n} papers`, older: n => `${n} papers · expand`, fold: "Collapse", year: y => y, mon: m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1], noMonth: "No month", keyTip: n => `Most cited in its category this month (${n})` },
 };
 
 let CFG, ROOT, BY = {}, LATEST, ROWS = [], COLS = [], DATA;
-const S = { lang: "zh", range: "12", open: new Set(), years: new Set(), sel: null, level: 0 };
+const S = { lang: "zh", range: "12", open: new Set(), years: new Set(), sel: null, tags: new Set() };
+let tipTimer;
 
 // 外观：默认浅色，可切到深色或跟随系统；选择记在本浏览器里（读写失败时按浅色处理）
 const THEMES = ["light", "dark", "auto"];
@@ -22,11 +23,21 @@ function applyTheme() {
 }
 applyTheme();
 
-// 分档筛选：config.json 的 levels 依次列出各档，每档写明必须具备的标签（后一档包含前一档的要求），一次只选一档。选择记在本浏览器里。
-try { S.level = +(localStorage.getItem("level") || 0) || 0; } catch (e) {}
+// 标签共同筛选：required 标签始终选中；选中标签时补齐 requires，取消时一并取消依赖它的标签。
 const match = (p, tags) => [...tags].every(t => (p.tags || []).includes(t));
 let CAP = 2;  // 收起的一级分类每格露出的篇数，由 config.json 的 cap 覆盖
-const levelTags = () => ((CFG.levels || [])[S.level] || {}).tags || [];
+function toggleTag(id, selected, defs) {
+  const tags = new Set(selected), def = defs.find(t => t.id === id);
+  if (def.required) return tags;
+  if (tags.has(id)) {
+    const remove = key => { tags.delete(key); defs.filter(t => tags.has(t.id) && (t.requires || []).includes(key)).forEach(t => remove(t.id)); };
+    remove(id);
+  } else {
+    const add = key => { if (tags.has(key)) return; tags.add(key); (defs.find(t => t.id === key).requires || []).forEach(add); };
+    add(id);
+  }
+  return tags;
+}
 
 // 每格的排序与折叠：代表论文在前（被同类引用多的优先），再按被引次数、日期；只显示前 cap 篇，其余计入"+N"
 // 展开的行里，按年折叠的列最多占几格：与本行最高的月份格一样高（至少 CAP 格，"+N" 也占一格）
@@ -43,7 +54,7 @@ async function boot() {
     CFG = await get("config.json");
     const [tax, papers, cites] = await Promise.all([get(CFG.taxonomy), get(CFG.papers), CFG.cites ? get(CFG.cites) : []]);
     DATA = { tax, papers, cites };
-    if (!(S.level < (CFG.levels || []).length)) S.level = 0;
+    S.tags = new Set([...JSON.parse(localStorage.getItem("tags") || "[]"), ...CFG.tags.filter(t => t.required).map(t => t.id)]);
     if (CFG.cap > 0) CAP = CFG.cap;
     apply();
   } catch (e) { const el = document.getElementById("err"); el.hidden = false; el.textContent = UI[S.lang].load + e.message; return; }
@@ -55,8 +66,24 @@ async function boot() {
     try { localStorage.setItem("theme", THEME); } catch (e) {}
     applyTheme(); render();
   };
+  document.getElementById("range").onclick = e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    S.range = b.dataset.r; S.sel = null; render();
+  };
+  document.getElementById("tags").onclick = e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    S.tags = toggleTag(b.dataset.tag, S.tags, CFG.tags);
+    localStorage.setItem("tags", JSON.stringify([...S.tags]));
+    S.sel = null; apply(); render();
+  };
+  document.getElementById("tip").onmouseenter = () => clearTimeout(tipTimer);
+  document.getElementById("tip").onmouseleave = () => tip(null);
+  document.getElementById("tip").onfocusout = e => { if (!e.currentTarget.contains(e.relatedTarget)) tip(null); };
+  window.addEventListener("resize", () => tip(null));
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && S.sel) unselect();
+    if (e.key === "Escape") { tip(null); if (S.sel) unselect(); }
     else if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) { e.preventDefault(); page(e.key === "ArrowLeft" ? -1 : 1); }
   });
   render();
@@ -64,7 +91,7 @@ async function boot() {
 
 // 按当前标签筛出论文，重建分类树、代表论文和沿袭（只在筛出的论文之间计算）
 function apply() {
-  const ps = DATA.papers.filter(p => match(p, levelTags()));
+  const ps = DATA.papers.filter(p => match(p, S.tags));
   DATA.papers.forEach(p => { delete p._leaf; delete p._key; p._up = []; p._down = []; });
   view(DATA.tax, ps, DATA.cites, CFG.key || {});
   LATEST = DATA.papers.map(p => p.date).filter(d => d.length >= 7).sort().pop().slice(0, 7);  // 时间轴按全部论文定，筛选时不跳动
@@ -182,22 +209,20 @@ function colOf(p, cols) {
 
 function render() {
   const t = UI[S.lang], L = S.lang;
+  tip(null);
   document.documentElement.lang = L === "zh" ? "zh-CN" : "en";
   document.title = ROOT.name[L];
   document.getElementById("title").textContent = ROOT.name[L];
-  document.getElementById("lang").textContent = t.other;
+  const tags = document.getElementById("tags"), range = document.getElementById("range");
+  tags.setAttribute("aria-label", t.tags);
+  tags.innerHTML = CFG.tags.map(x => `<button data-tag="${x.id}" aria-pressed="${S.tags.has(x.id)}"${x.required ? ` disabled title="${t.required}"` : ""}>${esc(L === "zh" ? x.name_zh : x.name)}</button>`).join("");
+  document.getElementById("count").textContent = t.yearCount(ROOT.papers.length);
+  range.setAttribute("aria-label", t.time);
+  range.innerHTML = Object.entries(t.ranges).map(([k, v]) => `<button data-r="${k}" aria-pressed="${S.range === k}">${v}</button>`).join("");
   document.getElementById("theme").textContent = t.themes[THEME];
-  // 时间范围
-  document.getElementById("range").innerHTML = Object.entries(t.ranges).map(([k, v]) => `<button data-r="${k}" aria-pressed="${S.range === k}">${v}</button>`).join("");
-  document.querySelectorAll("#range button").forEach(b => b.onclick = () => { S.range = b.dataset.r; S.sel = null; render(); });
-  const lv = document.getElementById("tags");
-  lv.hidden = !(CFG.levels || []).length;
-  lv.innerHTML = (CFG.levels || []).map((x, i) => `<button data-lv="${i}" aria-pressed="${S.level === i}">${esc(L === "zh" ? x.name_zh : x.name)}</button>`).join("");
-  lv.querySelectorAll("button").forEach(b => b.onclick = () => {
-    S.level = +b.dataset.lv;
-    try { localStorage.setItem("level", S.level); } catch (e) {}
-    S.sel = null; apply(); render();
-  });
+  document.getElementById("theme").title = t.appearance;
+  document.getElementById("lang").textContent = t.other;
+  document.getElementById("lang").title = t.language;
 
   const rows = visibleRows(), focus = selected(rows);
   // 选中论文时，时间轴只留它的沿袭所在的月份，整条链收在一屏内；换选另一篇时按新论文重新收拢；取消选中后恢复完整时间轴
@@ -250,8 +275,11 @@ function render() {
   view.querySelectorAll("[data-o]").forEach(b => b.onclick = () => { S.open.has(b.dataset.o) ? S.open.delete(b.dataset.o) : S.open.add(b.dataset.o); render(); });
   view.querySelectorAll("[data-y]").forEach(b => b.onclick = () => { S.years.has(b.dataset.y) ? S.years.delete(b.dataset.y) : S.years.add(b.dataset.y); render(); });
   view.querySelectorAll(".chip").forEach(a => {
-    a.onmousemove = e => tip(e, a.dataset.tip);
-    a.onmouseleave = () => tip(null);
+    const p = ROWS[+a.dataset.r].node.papers.find(p => p.id === a.dataset.id);
+    a.onmouseenter = e => tip(e, p);
+    a.onmouseleave = () => { tipTimer = setTimeout(() => tip(null), 120); };
+    a.onfocus = () => tip({ currentTarget: a }, p);
+    a.onblur = e => { if (!document.getElementById("tip").contains(e.relatedTarget)) tip(null); };
     // 第一次点：选中，高亮同类沿袭；再点已选中的：打开论文
     a.onclick = e => {
       const row = ROWS[+a.dataset.r].node.id, id = a.dataset.id;
@@ -266,7 +294,7 @@ function render() {
     if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
     e.preventDefault(); view.scrollLeft += e.deltaY;
   }, { passive: false }));
-  view.onscroll = pager;
+  view.onscroll = () => { tip(null); pager(); };
   pager();
   pick();
 }
@@ -351,18 +379,32 @@ function pick() {
 }
 
 function chip(p, row, ri) {
-  const L = S.lang, leaf = p._leaf, tl = L === "zh" ? p.tldr_zh : p.tldr_en;
-  const where = leaf && leaf !== row ? leaf.name[L] + "\n" : "";
-  const k = p._key ? UI[L].keyTip(p._key) + "\n" : "";
-  const c = Number.isInteger(p.cited) ? UI[L].cited(p.cited) + "\n" : "";
-  return `<a class="chip${p._key ? " key" : ""}" data-id="${esc(p.id)}" data-r="${ri}" style="--gc:${(leaf || row).color}" href="${p.url}" target="_blank" rel="noopener" data-tip="${esc(p.title + "\n" + p.date + "　" + where + k + c + "\n" + tl)}"><span>${esc(p.short || p.title)}</span></a>`;
+  const leaf = p._leaf;
+  return `<a class="chip${p._key ? " key" : ""}" data-id="${esc(p.id)}" data-r="${ri}" style="--gc:${(leaf || row).color}" href="${p.url}" target="_blank" rel="noopener"><span>${esc(p.short || p.title)}</span></a>`;
 }
 function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
-function tip(e, text) {
+function tip(e, p) {
+  clearTimeout(tipTimer);
   const el = document.getElementById("tip");
+  document.querySelector('.chip[aria-describedby="tip"]')?.removeAttribute("aria-describedby");
   if (!e) { el.hidden = true; return; }
-  el.hidden = false; el.textContent = text;
-  el.style.left = Math.min(e.clientX + 14, innerWidth - 440) + "px"; el.style.top = Math.min(e.clientY + 16, innerHeight - 170) + "px";
+  const L = S.lang, t = UI[L], path = [];
+  for (let n = p._leaf; n && n !== ROOT; n = n.parent) path.unshift(n.name[L]);
+  const tags = CFG.tags.filter(x => p.tags.includes(x.id));
+  el.style.setProperty("--gc", p._leaf.color);
+  el.innerHTML = `<div class="tip-category"><span>${path.map(esc).join(' <span aria-hidden="true">›</span> ')}</span><span class="tip-code">${esc(p.tag)}</span></div>
+    <h2 id="tip-title"><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2><p class="tip-authors">${esc(p.authors)}</p>
+    <div class="tip-section"><span class="tip-label">${t.tags}</span><div class="tip-tags">${tags.map(x => `<span>${esc(L === "zh" ? x.name_zh : x.name)}</span>`).join("")}</div></div>
+    <div class="tip-section"><span class="tip-label">${t.summary}</span><p class="tip-summary">${esc(L === "zh" ? p.tldr_zh : p.tldr_en)}</p></div>
+    <div class="tip-footer"><a class="tip-paper" href="${esc(p.url)}" target="_blank" rel="noopener">${t.paper} ↗</a><span>${esc(p.venue)} · ${esc(p.date)}</span>${Number.isInteger(p.cited) ? `<span>${t.citations} <b>${p.cited}</b> <span class="tip-source">Semantic Scholar</span></span>` : ""}</div>
+    ${p._key ? `<div class="tip-key">${esc(t.keyTip(p._key))}</div>` : ""}`;
+  el.hidden = false;
+  e.currentTarget.setAttribute("aria-describedby", "tip");
+  const anchor = e.currentTarget.getBoundingClientRect(), box = el.getBoundingClientRect(), gap = 10;
+  const left = anchor.right + gap + box.width <= innerWidth - gap ? anchor.right + gap : anchor.left - gap - box.width;
+  const top = anchor.top + box.height <= innerHeight - gap ? anchor.top : innerHeight - gap - box.height;
+  el.style.left = Math.max(gap, Math.min(left, innerWidth - gap - box.width)) + "px";
+  el.style.top = Math.max(gap, top) + "px";
 }
 if (typeof document !== "undefined") boot();
-else module.exports = { build, marks, lineage, chain, reach, match, view, cell, yearCap, get BY() { return BY; }, get ROOT() { return ROOT; } };
+else module.exports = { build, marks, lineage, chain, reach, match, toggleTag, view, cell, yearCap, get BY() { return BY; }, get ROOT() { return ROOT; } };
