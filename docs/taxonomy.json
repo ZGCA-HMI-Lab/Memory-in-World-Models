@@ -95,6 +95,11 @@
           "name_zh": "导航世界模型",
           "code": "MA.Nav",
           "children": []
+        },
+        {
+          "name": "Driving World Models",
+          "name_zh": "驾驶世界模型",
+          "code": "MA.Drive"
         }
       ]
     }

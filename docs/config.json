@@ -7,5 +7,45 @@
  "key": {
   "min": 2,
   "max": 2
- }
+ },
+ "tags": [
+  {
+   "id": "memory",
+   "name": "Memory",
+   "name_zh": "记忆"
+  },
+  {
+   "id": "wm",
+   "name": "World model",
+   "name_zh": "世界模型"
+  },
+  {
+   "id": "emb",
+   "name": "Embodied",
+   "name_zh": "具身"
+  }
+ ],
+ "levels": [
+  {
+   "name": "Memory",
+   "name_zh": "记忆",
+   "tags": []
+  },
+  {
+   "name": "World model",
+   "name_zh": "世界模型",
+   "tags": [
+    "wm"
+   ]
+  },
+  {
+   "name": "Embodied",
+   "name_zh": "具身",
+   "tags": [
+    "wm",
+    "emb"
+   ]
+  }
+ ],
+ "cap": 2
 }

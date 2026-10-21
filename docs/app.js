@@ -3,13 +3,13 @@
 
 const UI = {
   zh: { other: "EN", load: "数据加载失败：", ranges: { "6": "近半年", "12": "近一年", all: "全部" },
-        newer: "更新", earlier: "更早", themes: { auto: "跟随系统", light: "浅色", dark: "深色" }, older: n => `${n} 篇 · 点击展开`, fold: "收起", year: y => `${y} 年`, mon: m => `${m}月`, noMonth: "未注明月份", keyTip: n => `本月同类被引最多（${n} 次）` },
+        newer: "更新", earlier: "更早", themes: { auto: "跟随系统", light: "浅色", dark: "深色" }, cited: n => `被引 ${n} 次（Semantic Scholar）`, more: n => `+${n}`, groupTip: "展开这一类", yearTip: "展开这一年", yearCount: n => `${n} 篇`, older: n => `${n} 篇 · 点击展开`, fold: "收起", year: y => `${y} 年`, mon: m => `${m}月`, noMonth: "未注明月份", keyTip: n => `本月同类被引最多（${n} 次）` },
   en: { other: "中文", load: "Could not load data: ", ranges: { "6": "6 months", "12": "1 year", all: "All" },
-        newer: "Newer", earlier: "Older", themes: { auto: "Auto", light: "Light", dark: "Dark" }, older: n => `${n} papers · expand`, fold: "Collapse", year: y => y, mon: m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1], noMonth: "No month", keyTip: n => `Most cited in its category this month (${n})` },
+        newer: "Newer", earlier: "Older", themes: { auto: "Auto", light: "Light", dark: "Dark" }, cited: n => `Cited by ${n} (Semantic Scholar)`, more: n => `+${n}`, groupTip: "Expand this category", yearTip: "Expand this year", yearCount: n => `${n} papers`, older: n => `${n} papers · expand`, fold: "Collapse", year: y => y, mon: m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1], noMonth: "No month", keyTip: n => `Most cited in its category this month (${n})` },
 };
 
-let CFG, ROOT, BY = {}, LATEST, ROWS = [], COLS = [];
-const S = { lang: "zh", range: "12", open: new Set(), years: new Set(), sel: null };
+let CFG, ROOT, BY = {}, LATEST, ROWS = [], COLS = [], DATA;
+const S = { lang: "zh", range: "12", open: new Set(), years: new Set(), sel: null, level: 0 };
 
 // 外观：默认浅色，可切到深色或跟随系统；选择记在本浏览器里（读写失败时按浅色处理）
 const THEMES = ["light", "dark", "auto"];
@@ -22,15 +22,30 @@ function applyTheme() {
 }
 applyTheme();
 
+// 分档筛选：config.json 的 levels 依次列出各档，每档写明必须具备的标签（后一档包含前一档的要求），一次只选一档。选择记在本浏览器里。
+try { S.level = +(localStorage.getItem("level") || 0) || 0; } catch (e) {}
+const match = (p, tags) => [...tags].every(t => (p.tags || []).includes(t));
+let CAP = 2;  // 收起的一级分类每格露出的篇数，由 config.json 的 cap 覆盖
+const levelTags = () => ((CFG.levels || [])[S.level] || {}).tags || [];
+
+// 每格的排序与折叠：代表论文在前（被同类引用多的优先），再按被引次数、日期；只显示前 cap 篇，其余计入"+N"
+// 展开的行里，按年折叠的列最多占几格：与本行最高的月份格一样高（至少 CAP 格，"+N" 也占一格）
+function yearCap(monthCounts) { return Math.max(CAP, ...monthCounts); }
+function cell(ps, cap) {
+  const order = [...ps].sort((a, b) => (b._key || 0) - (a._key || 0) || (b.cited || 0) - (a.cited || 0) || b.date.localeCompare(a.date) || (a.short || "").localeCompare(b.short || ""));
+  return { show: order.slice(0, cap), rest: Math.max(0, order.length - cap) };
+}
+
 async function boot() {
   try {
     // 数据文件每次都向服务器确认是否更新，避免改了数据浏览器仍用旧的
     const get = u => fetch(u, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(`${u} ${r.status}`); return r.json(); });
     CFG = await get("config.json");
     const [tax, papers, cites] = await Promise.all([get(CFG.taxonomy), get(CFG.papers), CFG.cites ? get(CFG.cites) : []]);
-    build(tax, papers);
-    marks(cites, CFG.key || {});
-    lineage(cites);
+    DATA = { tax, papers, cites };
+    if (!(S.level < (CFG.levels || []).length)) S.level = 0;
+    if (CFG.cap > 0) CAP = CFG.cap;
+    apply();
   } catch (e) { const el = document.getElementById("err"); el.hidden = false; el.textContent = UI[S.lang].load + e.message; return; }
   S.lang = CFG.lang || "zh";
   S.range = String(CFG.recent_months || 12);
@@ -45,6 +60,20 @@ async function boot() {
     else if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) { e.preventDefault(); page(e.key === "ArrowLeft" ? -1 : 1); }
   });
   render();
+}
+
+// 按当前标签筛出论文，重建分类树、代表论文和沿袭（只在筛出的论文之间计算）
+function apply() {
+  const ps = DATA.papers.filter(p => match(p, levelTags()));
+  DATA.papers.forEach(p => { delete p._leaf; delete p._key; p._up = []; p._down = []; });
+  view(DATA.tax, ps, DATA.cites, CFG.key || {});
+  LATEST = DATA.papers.map(p => p.date).filter(d => d.length >= 7).sort().pop().slice(0, 7);  // 时间轴按全部论文定，筛选时不跳动
+}
+function view(tax, papers, cites, key) {
+  BY = {};
+  build(tax, papers);
+  marks(cites, key);
+  lineage(cites);
 }
 
 // taxonomy.json → 树。任意深度；末端节点用 code 关联论文编号前缀。
@@ -161,6 +190,14 @@ function render() {
   // 时间范围
   document.getElementById("range").innerHTML = Object.entries(t.ranges).map(([k, v]) => `<button data-r="${k}" aria-pressed="${S.range === k}">${v}</button>`).join("");
   document.querySelectorAll("#range button").forEach(b => b.onclick = () => { S.range = b.dataset.r; S.sel = null; render(); });
+  const lv = document.getElementById("tags");
+  lv.hidden = !(CFG.levels || []).length;
+  lv.innerHTML = (CFG.levels || []).map((x, i) => `<button data-lv="${i}" aria-pressed="${S.level === i}">${esc(L === "zh" ? x.name_zh : x.name)}</button>`).join("");
+  lv.querySelectorAll("button").forEach(b => b.onclick = () => {
+    S.level = +b.dataset.lv;
+    try { localStorage.setItem("level", S.level); } catch (e) {}
+    S.sel = null; apply(); render();
+  });
 
   const rows = visibleRows(), focus = selected(rows);
   // 选中论文时，时间轴只留它的沿袭所在的月份，整条链收在一屏内；换选另一篇时按新论文重新收拢；取消选中后恢复完整时间轴
@@ -177,14 +214,31 @@ function render() {
   });
   rows.forEach((r, i) => {
     const n = r.node, band = r.lvl === 0 && i > 0 ? " g0" : "";
-    const caret = n.kids.length ? `<button class="caret" data-o="${n.id}" aria-label="toggle">${r.open ? "▾" : "▸"}</button>` : `<span class="caret"></span>`;
-    html += `<div class="label d${n.depth}${band}" style="padding-left:${10 + r.lvl * 18}px;--gc:${n.color}">${caret}${n.kids.length ? `<button class="name" data-n="${n.id}" aria-expanded="${r.open}">` : `<span class="name">`}<span class="t">${n.name[L]}</span><span class="c">${n.papers.length}</span>${n.kids.length ? "</button>" : "</span>"}</div>`;
+    // 一级分类（含没有子分类的一级分类）都可以点名称展开或收起；展开后整类全部显示，不再有二次折叠
+    const top = r.lvl === 0, opened = S.open.has(n.id);
+    const caret = top ? `<button class="caret" data-o="${n.id}" aria-label="toggle">${opened ? "▾" : "▸"}</button>` : `<span class="caret"></span>`;
+    html += `<div class="label d${n.depth}${band}" style="padding-left:${10 + r.lvl * 18}px;--gc:${n.color}">${caret}${top ? `<button class="name" data-n="${n.id}" aria-expanded="${opened}">` : `<span class="name">`}<span class="t">${n.name[L]}</span><span class="c">${n.papers.length}</span>${top ? "</button>" : "</span>"}</div>`;
     if (r.open) { cols.forEach(() => html += `<div class="cell${band}"></div>`); return; }
     const cells = cols.map(() => []);
     n.papers.forEach(p => { const ci = colOf(p, cols); if (ci >= 0) cells[ci].push(p); });
+    // 只有收起的一级分类折叠：每格露前 CAP 篇（代表论文优先），"+N" 一次展开整类。选中论文所在行不折叠。
+    const cap = top && !opened && !(focus && focus.ri === i) ? CAP : Infinity;
+    // 按年折叠的列：收起的行只给篇数；展开的行按本行最高的月份格能放几篇来放，代表论文优先，放不下的计入"+N"（点它展开该年）
+    const ycap = yearCap(cells.filter((_, ci) => cols[ci].type === "m").map(ps => ps.length));
     cells.forEach((ps, ci) => {
-      ps.sort((a, b) => b.date.localeCompare(a.date) || (a.short || "").localeCompare(b.short || ""));
-      html += `<div class="cell${band}" data-r="${i}" data-c="${ci}">${ps.map(p => chip(p, n, i)).join("")}</div>`;
+      let inner = "";
+      if (cols[ci].type === "y") {
+        if (!ps.length) inner = "";
+        else if (cap !== Infinity) inner = `<button class="ycount" data-y="${cols[ci].key}">${t.yearCount(ps.length)}</button>`;
+        else {
+          const { show, rest } = cell(ps, ps.length > ycap ? ycap - 1 : ycap);
+          inner = show.map(p => chip(p, n, i)).join("") + (rest ? `<button class="more" data-y="${cols[ci].key}" title="${t.yearTip}">${t.more(rest)}</button>` : "");
+        }
+      } else {
+        const { show, rest } = cell(ps, cap);
+        inner = show.map(p => chip(p, n, i)).join("") + (rest ? `<button class="more" data-o="${n.id}" title="${t.groupTip}">${t.more(rest)}</button>` : "");
+      }
+      html += `<div class="cell${band}" data-r="${i}" data-c="${ci}">${inner}</div>`;
     });
   });
   html += `</div>`;
@@ -300,7 +354,8 @@ function chip(p, row, ri) {
   const L = S.lang, leaf = p._leaf, tl = L === "zh" ? p.tldr_zh : p.tldr_en;
   const where = leaf && leaf !== row ? leaf.name[L] + "\n" : "";
   const k = p._key ? UI[L].keyTip(p._key) + "\n" : "";
-  return `<a class="chip${p._key ? " key" : ""}" data-id="${esc(p.id)}" data-r="${ri}" style="--gc:${(leaf || row).color}" href="${p.url}" target="_blank" rel="noopener" data-tip="${esc(p.title + "\n" + p.date + "　" + where + k + "\n" + tl)}"><span>${esc(p.short || p.title)}</span></a>`;
+  const c = Number.isInteger(p.cited) ? UI[L].cited(p.cited) + "\n" : "";
+  return `<a class="chip${p._key ? " key" : ""}" data-id="${esc(p.id)}" data-r="${ri}" style="--gc:${(leaf || row).color}" href="${p.url}" target="_blank" rel="noopener" data-tip="${esc(p.title + "\n" + p.date + "　" + where + k + c + "\n" + tl)}"><span>${esc(p.short || p.title)}</span></a>`;
 }
 function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
 function tip(e, text) {
@@ -310,4 +365,4 @@ function tip(e, text) {
   el.style.left = Math.min(e.clientX + 14, innerWidth - 440) + "px"; el.style.top = Math.min(e.clientY + 16, innerHeight - 170) + "px";
 }
 if (typeof document !== "undefined") boot();
-else module.exports = { build, marks, lineage, chain, reach, get BY() { return BY; }, get ROOT() { return ROOT; } };
+else module.exports = { build, marks, lineage, chain, reach, match, view, cell, yearCap, get BY() { return BY; }, get ROOT() { return ROOT; } };

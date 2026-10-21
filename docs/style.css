@@ -22,7 +22,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--c4);outline-offset:
 /* Top bar */
 .top{display:flex;align-items:center;gap:8px 20px;flex-wrap:wrap;margin-bottom:12px}
 h1{font-size:20px;font-weight:700;letter-spacing:.01em;margin:0}
-.ctl{display:flex;align-items:center;gap:12px;margin-left:auto}
+.ctl{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px 12px;margin-left:auto;min-width:0}
 .range{display:flex;gap:2px;padding:2px;border-radius:7px;background:var(--hover);font-size:13px}
 .range button{padding:3px 10px;border-radius:5px;color:var(--muted)}
 .range button:hover{color:var(--ink)}
@@ -58,6 +58,11 @@ button.name:hover{background:var(--hover)}
 .chip:hover{border-color:color-mix(in srgb,var(--gc) 55%,var(--line))}
 .chip.key{background:color-mix(in srgb,var(--gc) 15%,var(--surface));border-color:color-mix(in srgb,var(--gc) 40%,var(--surface));font-weight:600}
 
+.more,.ycount{align-self:flex-start;font-size:12px;color:var(--muted);padding:2px 8px;border-radius:6px;border:1px dashed var(--line)}
+.more:hover,.ycount:hover{color:var(--ink);border-color:var(--muted);background:var(--hover)}
+.ycount{border-style:solid;background:var(--band)}
+.grid.focus .more,.grid.focus .ycount{opacity:.25}
+
 /* Selection: the clicked paper is solid, upstream is tinted, downstream is dashed, everything else fades */
 .grid.focus .chip{opacity:.25;background:var(--surface);border-color:var(--line);font-weight:400}
 .grid.focus .chip.up{opacity:1;background:color-mix(in srgb,var(--gc) 14%,var(--surface));border-color:var(--gc)}
@@ -66,4 +71,4 @@ button.name:hover{background:var(--hover)}
 
 .tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:7px 11px;border-radius:6px;max-width:420px;white-space:pre-line;z-index:20;line-height:1.55;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .err{color:var(--c1)}
-@media (max-width:640px){:root{--labelW:150px;--colW:128px}.top{gap:8px 12px}h1{font-size:17px}.ctl{gap:8px}.range button{padding:3px 8px}.lang{padding:3px 8px}.chip span{-webkit-line-clamp:3}}
+@media (max-width:640px){:root{--labelW:150px;--colW:128px}.top{gap:8px 12px}h1{font-size:17px}.ctl{gap:8px;margin-left:0;justify-content:flex-start}.range button{padding:3px 8px}.lang{padding:3px 8px}.chip span{-webkit-line-clamp:3}}
