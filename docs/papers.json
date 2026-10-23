@@ -910,7 +910,7 @@
  },
  {
   "id": "2605.25333",
-  "tag": "ML.Aware.1",
+  "tag": "ML.1",
   "title": "Teaching Video Generators to Remember: Eliciting Dynamic Memory for Out-of-Sight State Evolution",
   "short": "ReMind",
   "authors": "Tianshuo Xu et al.",
@@ -928,7 +928,7 @@
  },
  {
   "id": "2510.03198",
-  "tag": "ML.Objective.1",
+  "tag": "ML.2",
   "title": "Memory Forcing: Spatio-Temporal Memory for Consistent Scene Generation on Minecraft",
   "short": "Memory Forcing",
   "authors": "Junchao Huang et al.",
@@ -946,7 +946,7 @@
  },
  {
   "id": "2605.30855",
-  "tag": "ML.Dist.1",
+  "tag": "ML.3",
   "title": "Robust Dreamer: Deviation-Aware Latent Gaussian Memory for Action-Controlled AR Video Generation",
   "short": "Robust Dreamer",
   "authors": "Hanlin Chen et al.",
@@ -1264,7 +1264,7 @@
  },
  {
   "id": "2606.31734",
-  "tag": "ML.Aware.2",
+  "tag": "ML.4",
   "title": "MemLearner: Learning to Query Context memory for Video World Models",
   "short": "MemLearner",
   "authors": "Jiwen Yu et al.",
@@ -1282,7 +1282,7 @@
  },
  {
   "id": "2609.34677",
-  "tag": "ML.Aware.3",
+  "tag": "ML.5",
   "title": "Learning What to Recall: Adaptive Multi-Cue Episodic Memory for World Models",
   "short": "FAR",
   "authors": "Beomsu Kim et al.",
@@ -2329,7 +2329,7 @@
  },
  {
   "id": "2602.06028",
-  "tag": "ML.Objective.3",
+  "tag": "ML.6",
   "title": "Context Forcing: Consistent Autoregressive Video Generation with Long Context",
   "short": "Context Forcing",
   "authors": "Shuo Chen et al.",
@@ -2560,7 +2560,7 @@
  },
  {
   "id": "2608.04964",
-  "tag": "ML.Objective.4",
+  "tag": "ML.7",
   "title": "WorldCycle: Self-Verifiable Reinforcement Learning for Long-Horizon Video World Models",
   "short": "WorldCycle",
   "authors": "Bohai Gu et al.",
@@ -2578,7 +2578,7 @@
  },
  {
   "id": "2608.13546",
-  "tag": "ML.Objective.5",
+  "tag": "ML.8",
   "title": "Alaya-EVOKE: From Linear-Scaling Supervision to Endless World",
   "short": "Alaya-EVOKE",
   "authors": "Yuan-Yang Yin et al.",
@@ -2614,7 +2614,7 @@
  },
  {
   "id": "2608.26794",
-  "tag": "ML.Aware.4",
+  "tag": "ML.9",
   "title": "Ring Forcing: Towards Precise Long-Term Memory for Autoregressive Video Diffusion",
   "short": "Ring Forcing",
   "authors": "Bowen Xue et al.",
@@ -2648,7 +2648,7 @@
  },
  {
   "id": "2608.28460",
-  "tag": "ML.Aware.7",
+  "tag": "ML.10",
   "title": "LayerRecall: A State-Conditioned Memory Router for Long-Horizon Consistency in Video Generation",
   "short": "LayerRecall",
   "authors": "Yixuan Ding et al.",
@@ -2918,7 +2918,7 @@
  },
  {
   "id": "2610.00544",
-  "tag": "ML.Aware.5",
+  "tag": "ML.11",
   "title": "Memorizon: Training World Models Beyond Their Context Window",
   "short": "Memorizon",
   "authors": "Ting-Ting Liao et al.",
@@ -2936,7 +2936,7 @@
  },
  {
   "id": "2609.38839",
-  "tag": "ML.Aware.8",
+  "tag": "ML.12",
   "title": "FrameMorrow: Future-guided Frame Selection with Prospective Tokens for Long-Horizon Video Generation",
   "short": "FrameMorrow",
   "authors": "Bo Yin et al.",
@@ -2954,7 +2954,7 @@
  },
  {
   "id": "2610.02153",
-  "tag": "ML.Aware.6",
+  "tag": "ML.13",
   "title": "MosaiChunk: Compositing Spatio-Temporal Memory for Autoregressive Video Generation",
   "short": "MosaiChunk",
   "authors": "Yi-Wen Zhang et al.",
@@ -3697,7 +3697,7 @@
  },
  {
   "id": "2503.10589",
-  "tag": "ML.Dist.3",
+  "tag": "ML.14",
   "title": "Long Context Tuning for Video Generation",
   "short": "LCT",
   "authors": "Yuwei Guo et al.",
@@ -4163,7 +4163,7 @@
  },
  {
   "id": "2603.02765",
-  "tag": "ML.Objective.6",
+  "tag": "ML.15",
   "title": "Next Embedding Prediction Makes World Models Stronger",
   "short": "NE-Dreamer",
   "authors": "George Bredis et al.",
@@ -4633,7 +4633,7 @@
  },
  {
   "id": "2606.14667",
-  "tag": "ML.Objective.7",
+  "tag": "ML.16",
   "title": "Memento: Reconstruct to Remember for Consistent Long Video Generation",
   "short": "Memento",
   "authors": "Xuan Wei et al.",
@@ -4842,7 +4842,7 @@
  },
  {
   "id": "2607.20368",
-  "tag": "ML.Objective.8",
+  "tag": "ML.17",
   "title": "Self Gradient Forcing: Native Long Video Extrapolation",
   "short": "Self Gradient Forcing",
   "authors": "Junhao Zhuang et al.",
@@ -5092,7 +5092,7 @@
  },
  {
   "id": "2609.34604",
-  "tag": "ML.Objective.9",
+  "tag": "ML.18",
   "title": "Shaping Persistent Representations from Independent Interactions",
   "short": "SPRII",
   "authors": "Jia-Xuan Dai et al.",
@@ -5202,7 +5202,7 @@
  },
  {
   "id": "2610.03636",
-  "tag": "ML.Objective.10",
+  "tag": "ML.19",
   "title": "LoGo: Local-Global Rewards for Consistent Long-Horizon Video Generation",
   "short": "LoGo",
   "authors": "Ziqi Ma et al.",

@@ -45,26 +45,8 @@
     {
       "name": "Memory Learning",
       "name_zh": "记忆学习",
-      "children": [
-        {
-          "name": "Learning Objectives",
-          "name_zh": "学习目标",
-          "code": "ML.Objective",
-          "children": []
-        },
-        {
-          "name": "Memory State Distribution",
-          "name_zh": "记忆状态分布",
-          "code": "ML.Dist",
-          "children": []
-        },
-        {
-          "name": "Memory-Aware Learning",
-          "name_zh": "记忆感知学习",
-          "code": "ML.Aware",
-          "children": []
-        }
-      ]
+      "children": [],
+      "code": "ML"
     },
     {
       "name": "Memory Evaluation",
