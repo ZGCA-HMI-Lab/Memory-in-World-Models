@@ -2,10 +2,10 @@
 // 所有分类、名称和论文都从 config.json 指向的数据文件读取，页面不写死内容。
 
 const UI = {
-  zh: { load: "数据加载失败：", required: "记忆为必选标签", paper: "阅读论文", other: "EN", time: "时间", appearance: "外观", language: "语言", tags: "调研标签", summary: "研究内容", citations: "被引", ranges: { "6": "近半年", "12": "近一年", all: "全部" },
-        newer: "更新", earlier: "更早", themes: { auto: "跟随系统", light: "浅色", dark: "深色" }, more: n => `+${n}`, groupTip: "展开这一类", yearTip: "展开这一年", yearCount: n => `${n} 篇`, older: n => `${n} 篇 · 点击展开`, fold: "收起", year: y => `${y} 年`, mon: m => `${m}月`, noMonth: "未注明月份", keyTip: n => `本月同类被引最多（${n} 次）` },
-  en: { load: "Could not load data: ", required: "Memory is required", paper: "Read paper", other: "中文", time: "Time", appearance: "Theme", language: "Language", tags: "Research tags", summary: "Overview", citations: "Citations", ranges: { "6": "6 months", "12": "1 year", all: "All" },
-        newer: "Newer", earlier: "Older", themes: { auto: "Auto", light: "Light", dark: "Dark" }, more: n => `+${n}`, groupTip: "Expand this category", yearTip: "Expand this year", yearCount: n => `${n} papers`, older: n => `${n} papers · expand`, fold: "Collapse", year: y => y, mon: m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1], noMonth: "No month", keyTip: n => `Most cited in its category this month (${n})` },
+  zh: { load: "数据加载失败：", required: "记忆为必选标签", paper: "阅读论文", other: "EN", time: "时间", appearance: "外观", language: "语言", tags: "调研标签", summary: "研究内容", citations: "总被引", scopedCitations: { same: "同类被引", other: "跨类被引" }, ranges: { "6": "近半年", "12": "近一年", all: "全部" },
+        newer: "更新", earlier: "更早", themes: { auto: "跟随系统", light: "浅色", dark: "深色" }, more: n => `+${n}`, groupTip: "展开这一类", yearTip: "展开这一年", yearCount: n => `${n} 篇`, older: n => `${n} 篇 · 点击展开`, fold: "收起", year: y => `${y} 年`, mon: m => `${m}月`, noMonth: "未注明月份", keyTip: { same: n => `本月同类被引最多（${n} 次）`, other: n => `本月跨类被引最多（${n} 次）` } },
+  en: { load: "Could not load data: ", required: "Memory is required", paper: "Read paper", other: "中文", time: "Time", appearance: "Theme", language: "Language", tags: "Research tags", summary: "Overview", citations: "Total citations", scopedCitations: { same: "Same-category citations", other: "Cross-category citations" }, ranges: { "6": "6 months", "12": "1 year", all: "All" },
+        newer: "Newer", earlier: "Older", themes: { auto: "Auto", light: "Light", dark: "Dark" }, more: n => `+${n}`, groupTip: "Expand this category", yearTip: "Expand this year", yearCount: n => `${n} papers`, older: n => `${n} papers · expand`, fold: "Collapse", year: y => y, mon: m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1], noMonth: "No month", keyTip: { same: n => `Most cited in its category this month (${n})`, other: n => `Most cited by other categories this month (${n})` } },
 };
 
 let CFG, ROOT, BY = {}, LATEST, ROWS = [], COLS = [], DATA;
@@ -39,7 +39,7 @@ function toggleTag(id, selected, defs) {
   return tags;
 }
 
-// 每格的排序与折叠：代表论文在前（被同类引用多的优先），再按被引次数、日期；只显示前 cap 篇，其余计入"+N"
+// 每格的排序与折叠：代表论文在前（按分类配置的被引范围计数），再按被引次数、日期；只显示前 cap 篇，其余计入"+N"
 // 展开的行里，按年折叠的列最多占几格：与本行最高的月份格一样高（至少 CAP 格，"+N" 也占一格）
 function yearCap(monthCounts) { return Math.max(CAP, ...monthCounts); }
 function cell(ps, cap) {
@@ -92,7 +92,6 @@ async function boot() {
 // 按当前标签筛出论文，重建分类树、代表论文和沿袭（只在筛出的论文之间计算）
 function apply() {
   const ps = DATA.papers.filter(p => match(p, S.tags));
-  DATA.papers.forEach(p => { delete p._leaf; delete p._key; p._up = []; p._down = []; });
   view(DATA.tax, ps, DATA.cites, CFG.key || {});
   LATEST = DATA.papers.map(p => p.date).filter(d => d.length >= 7).sort().pop().slice(0, 7);  // 时间轴按全部论文定，筛选时不跳动
 }
@@ -105,12 +104,13 @@ function view(tax, papers, cites, key) {
 
 // taxonomy.json → 树。任意深度；末端节点用 code 关联论文编号前缀。
 function build(tax, papers) {
+  papers.forEach(p => { delete p._leaf; delete p._key; });
   const byLeaf = {};
   papers.filter(p => p.tag).forEach(p => { const c = p.tag.slice(0, p.tag.lastIndexOf(".")); (byLeaf[c] = byLeaf[c] || []).push(p); });
   let auto = 0;
   const make = (n, parent, depth, color) => {
     const pre = x => x.code ? x.code.split(".")[0] : (x.children || []).map(pre).find(Boolean);
-    const node = { id: n.code || (depth === 1 ? pre(n) : null) || `n${auto++}`, name: { zh: n.name_zh || n.title_zh, en: n.name || n.title }, parent, depth, color, kids: [] };
+    const node = { id: n.code || (depth === 1 ? pre(n) : null) || `n${auto++}`, name: { zh: n.name_zh || n.title_zh, en: n.name || n.title }, parent, depth, color, references: { ...parent?.references, ...n.references }, kids: [] };
     BY[node.id] = node;
     (n.children || []).forEach((c, i) => node.kids.push(make(c, node, depth + 1, depth === 0 ? `var(--c${i % 8})` : color)));
     node.papers = (n.code ? byLeaf[n.code] || [] : []).concat(...node.kids.map(k => k.papers));
@@ -122,17 +122,26 @@ function build(tax, papers) {
   LATEST = ROOT.papers.map(p => p.date).filter(d => d.length >= 7).sort().pop().slice(0, 7);
 }
 
-// 代表论文：同一末端分类、同一个月发表的论文里，被本分类其他论文引用最多的那篇（并列时最多 max 篇）。
+// 施引范围由分类 references.scope 决定；计数和选中展示共用这份直接引用索引。
+const REFERENCE_SCOPES = {
+  same: (p, source) => p._leaf === source._leaf,
+  other: (p, source) => p._leaf !== source._leaf,
+};
+function inScope(p, papers) { return papers.filter(other => REFERENCE_SCOPES[p._leaf.references.scope](p, other)); }
+
+// 代表论文：同一末端分类、同一个月发表的论文里，在配置范围内被引最多的那篇（并列时最多 max 篇）。
 // 当月只有一篇，或当月都还没被引用（少于 min 次），就不标。只用引用关系，不读论文内容。
 function marks(cites, opt) {
   const min = opt.min || 1, max = opt.max || 2;
+  const byId = Object.fromEntries(ROOT.papers.map(p => { p._cites = []; p._citedBy = []; return [p.id, p]; }));
+  cites.forEach(([a, b]) => { if (byId[a] && byId[b]) { byId[a]._cites.push(byId[b]); byId[b]._citedBy.push(byId[a]); } });
+  ROOT.papers.forEach(p => { p._refCount = inScope(p, p._citedBy).length; });
   Object.values(BY).filter(n => !n.kids.length && n !== ROOT).forEach(n => {
-    const own = new Set(n.papers.map(p => p.id)), cnt = {}, months = {};
-    cites.forEach(([a, b]) => { if (own.has(a) && own.has(b)) cnt[b] = (cnt[b] || 0) + 1; });
+    const months = {};
     n.papers.forEach(p => (months[monthKey(p.date)] = months[monthKey(p.date)] || []).push(p));
     Object.values(months).forEach(ps => {
       if (ps.length < 2) return;
-      const top = Math.max(...ps.map(p => cnt[p.id] || 0)), win = ps.filter(p => (cnt[p.id] || 0) === top);
+      const top = Math.max(...ps.map(p => p._refCount)), win = ps.filter(p => p._refCount === top);
       if (top >= min && win.length <= max) win.forEach(p => p._key = top);
     });
   });
@@ -144,7 +153,7 @@ function marks(cites, opt) {
 function lineage(cites) {
   const byId = {};
   ROOT.papers.forEach(p => { byId[p.id] = p; p._up = []; p._down = []; });
-  const same = (a, b) => a && b && a._leaf && a._leaf === b._leaf;
+  const same = (a, b) => a && b && a._leaf && a._leaf === b._leaf && a._leaf.references.mode === "lineage";
   const pairs = new Set(cites.map(([a, b]) => a + " " + b));
   const up = {};
   cites.forEach(([a, b]) => {
@@ -171,12 +180,28 @@ function reach(p, dir) {
   walk(p);
   return out;
 }
-function chain(p) { return new Set([p, ...reach(p, "_up"), ...reach(p, "_down")]); }
+const REFERENCE_MODES = {
+  lineage: p => ({ up: reach(p, "_up"), down: reach(p, "_down"), direct: false }),
+  citations: p => ({ up: new Set(inScope(p, p._cites)), down: new Set(inScope(p, p._citedBy)), direct: true }),
+};
+function related(p) {
+  const links = REFERENCE_MODES[p._leaf.references.mode](p);
+  return { p, ...links, set: new Set([p, ...links.up, ...links.down]) };
+}
 
-// 当前可见的行：焦点节点的子树，按展开状态逐层列出
-function visibleRows() {
+// 直接引用视图临时展开关联论文的祖先节点，不改动用户保存的展开状态。
+function visibleRows(focus) {
   const f = ROOT, rows = [];
-  const walk = (n, lvl) => { rows.push({ node: n, lvl, open: n.kids.length > 0 && S.open.has(n.id) }); if (n.kids.length && S.open.has(n.id)) n.kids.forEach(k => walk(k, lvl + 1)); };
+  const open = new Set(S.open);
+  if (focus && focus.direct) focus.set.forEach(p => {
+    for (let n = p._leaf.parent; n && n !== ROOT; n = n.parent) open.add(n.id);
+  });
+  const walk = (n, lvl) => {
+    if (focus && focus.direct && !n.papers.some(p => focus.set.has(p))) return;
+    const expanded = n.kids.length > 0 && open.has(n.id);
+    rows.push({ node: n, lvl, open: expanded });
+    if (expanded) n.kids.forEach(k => walk(k, lvl + 1));
+  };
   if (f.kids.length) f.kids.forEach(k => walk(k, 0)); else rows.push({ node: f, lvl: 0, open: false });
   return rows;
 }
@@ -224,8 +249,9 @@ function render() {
   document.getElementById("lang").textContent = t.other;
   document.getElementById("lang").title = t.language;
 
-  const rows = visibleRows(), focus = selected(rows);
-  // 选中论文时，时间轴只留它的沿袭所在的月份，整条链收在一屏内；换选另一篇时按新论文重新收拢；取消选中后恢复完整时间轴
+  const p = S.sel && ROOT.papers.find(p => p.id === S.sel.id), links = p && related(p);
+  const rows = visibleRows(links), focus = selected(rows, links);
+  // 选中论文时，时间轴只留当前引用视图涉及的月份；取消选中后恢复完整时间轴。
   const cols = focus ? [...new Set(focus.set.map(x => monthKey(x.date)))].sort().reverse().map(k => ({ type: "m", key: k })) : columns(rows);
   ROWS = rows; COLS = cols;
   // 选中时收拢后的月份铺满一屏（列宽按屏幕分配，不够才滚动）；平时列宽固定，用翻页按钮、←/→ 或在表头滚滚轮前后翻
@@ -240,14 +266,15 @@ function render() {
   rows.forEach((r, i) => {
     const n = r.node, band = r.lvl === 0 && i > 0 ? " g0" : "";
     // 一级分类（含没有子分类的一级分类）都可以点名称展开或收起；展开后整类全部显示，不再有二次折叠
-    const top = r.lvl === 0, opened = S.open.has(n.id);
+    const top = r.lvl === 0, opened = r.open || S.open.has(n.id);
     const caret = top ? `<button class="caret" data-o="${n.id}" aria-label="toggle">${opened ? "▾" : "▸"}</button>` : `<span class="caret"></span>`;
     html += `<div class="label d${n.depth}${band}" style="padding-left:${10 + r.lvl * 18}px;--gc:${n.color}">${caret}${top ? `<button class="name" data-n="${n.id}" aria-expanded="${opened}">` : `<span class="name">`}<span class="t">${n.name[L]}</span><span class="c">${n.papers.length}</span>${top ? "</button>" : "</span>"}</div>`;
     if (r.open) { cols.forEach(() => html += `<div class="cell${band}"></div>`); return; }
     const cells = cols.map(() => []);
-    n.papers.forEach(p => { const ci = colOf(p, cols); if (ci >= 0) cells[ci].push(p); });
-    // 只有收起的一级分类折叠：每格露前 CAP 篇（代表论文优先），"+N" 一次展开整类。选中论文所在行不折叠。
-    const cap = top && !opened && !(focus && focus.ri === i) ? CAP : Infinity;
+    const papers = focus && focus.direct ? n.papers.filter(p => focus.set.includes(p)) : n.papers;
+    papers.forEach(p => { const ci = colOf(p, cols); if (ci >= 0) cells[ci].push(p); });
+    // 引用视图涉及的行完整展示，避免关联论文被每格上限隐藏。
+    const cap = top && !opened && !(focus && focus.set.some(p => n.papers.includes(p))) ? CAP : Infinity;
     // 按年折叠的列：收起的行只给篇数；展开的行按本行最高的月份格能放几篇来放，代表论文优先，放不下的计入"+N"（点它展开该年）
     const ycap = yearCap(cells.filter((_, ci) => cols[ci].type === "m").map(ps => ps.length));
     cells.forEach((ps, ci) => {
@@ -280,10 +307,10 @@ function render() {
     a.onmouseleave = () => { tipTimer = setTimeout(() => tip(null), 120); };
     a.onfocus = () => tip({ currentTarget: a }, p);
     a.onblur = e => { if (!document.getElementById("tip").contains(e.relatedTarget)) tip(null); };
-    // 第一次点：选中，高亮同类沿袭；再点已选中的：打开论文
+    // 第一次点：选中，按分类配置高亮引用关系；再点已选中的：打开论文。
     a.onclick = e => {
       const row = ROWS[+a.dataset.r].node.id, id = a.dataset.id;
-      if (S.sel && S.sel.row === row && S.sel.id === id) return;
+      if (S.sel && S.sel.id === id) return;
       e.preventDefault(); e.stopPropagation();
       smooth(() => { S.sel = { row, id }; render(); }, a.dataset.r + "|" + id);
     };
@@ -296,18 +323,18 @@ function render() {
   }, { passive: false }));
   view.onscroll = () => { tip(null); pager(); };
   pager();
-  pick();
+  pick(focus);
 }
 
-// 选中一篇论文时，分别标出它在同类里的上游（它沿用的）和下游（沿用它的），其余变淡。先后由时间轴看出，不画线。
-// 当前选中的论文及其所在行、同类沿袭（只算这一行里的论文）；选中的论文已不可见时清空
-function selected(rows) {
+// 沿袭仍限定在原选中行；直接引用视图跨行展示配置范围内的双向直接引用。
+function selected(rows, links) {
   if (!S.sel) return null;
-  const ri = rows.findIndex(r => r.node.id === S.sel.row && !r.open);
-  const p = ri >= 0 && rows[ri].node.papers.find(x => x.id === S.sel.id);
-  if (!p) { S.sel = null; return null; }
-  const inRow = new Set(rows[ri].node.papers);
-  return { ri, p, set: [...chain(p)].filter(x => inRow.has(x)) };
+  if (!links) { S.sel = null; return null; }
+  const direct = links.direct;
+  const ri = rows.findIndex(r => r.node.id === (direct ? links.p._leaf.id : S.sel.row) && !r.open);
+  if (ri < 0) { S.sel = null; return null; }
+  const visible = p => direct || rows[ri].node.papers.includes(p);
+  return { p: links.p, direct, up: [...links.up].filter(visible), down: [...links.down].filter(visible), set: [...links.set].filter(visible) };
 }
 function unselect() {
   const el = document.querySelector("#view .chip.sel");
@@ -359,23 +386,21 @@ function smooth(change, anchor) {
   setTimeout(() => now.forEach(el => { el.style.transition = ""; }), 320);
 }
 
-function pick() {
+function pick(focus) {
   const grid = document.querySelector("#view .grid");
   if (!grid) return;
   grid.classList.remove("focus");
   grid.querySelectorAll(".sel, .up, .down").forEach(c => c.classList.remove("sel", "up", "down"));
-  const ri = S.sel ? ROWS.findIndex(r => r.node.id === S.sel.row && !r.open) : -1;
-  const p = ri >= 0 && ROWS[ri].node.papers.find(x => x.id === S.sel.id);
-  if (!p) { S.sel = null; return; }
-  const inRow = new Set(ROWS[ri].node.papers);
+  if (!focus) return;
   grid.classList.add("focus");
-  grid.querySelector(`.chip[data-r="${ri}"][data-id="${CSS.escape(p.id)}"]`)?.classList.add("sel");
   const mark = (x, cls) => {
-    if (!inRow.has(x)) return;
+    const ri = ROWS.findIndex(r => !r.open && r.node.papers.includes(x));
+    if (ri < 0) return;
     grid.querySelector(`.chip[data-r="${ri}"][data-id="${CSS.escape(x.id)}"]`)?.classList.add(cls);
   };
-  reach(p, "_up").forEach(x => mark(x, "up"));
-  reach(p, "_down").forEach(x => mark(x, "down"));
+  mark(focus.p, "sel");
+  focus.up.forEach(x => mark(x, "up"));
+  focus.down.forEach(x => mark(x, "down"));
 }
 
 function chip(p, row, ri) {
@@ -396,8 +421,8 @@ function tip(e, p) {
     <h2 id="tip-title"><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2><p class="tip-authors">${esc(p.authors)}</p>
     <div class="tip-section"><span class="tip-label">${t.tags}</span><div class="tip-tags">${tags.map(x => `<span>${esc(L === "zh" ? x.name_zh : x.name)}</span>`).join("")}</div></div>
     <div class="tip-section"><span class="tip-label">${t.summary}</span><p class="tip-summary">${esc(L === "zh" ? p.tldr_zh : p.tldr_en)}</p></div>
-    <div class="tip-footer"><a class="tip-paper" href="${esc(p.url)}" target="_blank" rel="noopener">${t.paper} ↗</a><span>${esc(p.venue)} · ${esc(p.date)}</span>${Number.isInteger(p.cited) ? `<span>${t.citations} <b>${p.cited}</b> <span class="tip-source">Semantic Scholar</span></span>` : ""}</div>
-    ${p._key ? `<div class="tip-key">${esc(t.keyTip(p._key))}</div>` : ""}`;
+    <div class="tip-footer"><a class="tip-paper" href="${esc(p.url)}" target="_blank" rel="noopener">${t.paper} ↗</a><span>${esc(p.venue)} · ${esc(p.date)}</span><span>${t.scopedCitations[p._leaf.references.scope]} <b>${p._refCount}</b></span>${Number.isInteger(p.cited) ? `<span>${t.citations} <b>${p.cited}</b> <span class="tip-source">Semantic Scholar</span></span>` : ""}</div>
+    ${p._key ? `<div class="tip-key">${esc(t.keyTip[p._leaf.references.scope](p._key))}</div>` : ""}`;
   el.hidden = false;
   e.currentTarget.setAttribute("aria-describedby", "tip");
   const anchor = e.currentTarget.getBoundingClientRect(), box = el.getBoundingClientRect(), gap = 10;
@@ -407,4 +432,4 @@ function tip(e, p) {
   el.style.top = Math.max(gap, top) + "px";
 }
 if (typeof document !== "undefined") boot();
-else module.exports = { build, marks, lineage, chain, reach, match, toggleTag, view, cell, yearCap, get BY() { return BY; }, get ROOT() { return ROOT; } };
+else module.exports = { build, marks, lineage, reach, related, visibleRows, match, toggleTag, view, cell, yearCap, get BY() { return BY; }, get ROOT() { return ROOT; } };

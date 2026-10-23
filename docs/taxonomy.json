@@ -1,6 +1,10 @@
 {
   "title": "Memory in World Models",
   "title_zh": "世界模型记忆",
+  "references": {
+    "scope": "same",
+    "mode": "lineage"
+  },
   "children": [
     {
       "name": "Memory Representation",
@@ -33,16 +37,10 @@
       ]
     },
     {
-      "name": "Memory Operations",
-      "name_zh": "记忆操作",
-      "children": [
-        {
-          "name": "Memory Management",
-          "name_zh": "记忆管理",
-          "code": "MO.Manage",
-          "children": []
-        }
-      ]
+      "name": "Memory Management",
+      "name_zh": "记忆管理",
+      "code": "MO.Manage",
+      "children": []
     },
     {
       "name": "Memory Learning",
@@ -72,6 +70,10 @@
       "name": "Memory Evaluation",
       "name_zh": "记忆评测",
       "code": "ME",
+      "references": {
+        "scope": "other",
+        "mode": "citations"
+      },
       "children": []
     },
     {
@@ -85,8 +87,8 @@
           "children": []
         },
         {
-          "name": "World Action Models",
-          "name_zh": "世界动作模型",
+          "name": "Manipulation World Models",
+          "name_zh": "操作世界模型",
           "code": "MA.WA",
           "children": []
         },

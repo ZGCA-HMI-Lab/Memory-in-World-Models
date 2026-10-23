@@ -171,24 +171,6 @@
   "tldr_en": "A closed-loop VLM–WAM framework where the VLM plans subtasks, scores and fuses proposed actions, and tracks progress, with dual-stream hierarchical visual memory keeping subtask-boundary frames in full detail."
  },
  {
-  "id": "2604.21686",
-  "tag": "ME.6",
-  "title": "WorldMark: A Unified Benchmark Suite for Interactive Video World Models",
-  "short": "WorldMark",
-  "authors": "Xiaojie Xu et al.",
-  "date": "2026-04",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2604.21686",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 23,
-  "tldr_zh": "用逐模型适配器把统一的 WASD 指令转成各模型的控制格式，在 500 个用例上测动作响应、世界记忆与画质。",
-  "tldr_en": "WorldMark maps a shared WASD vocabulary to each model's native controls via adapters and scores 500 cases on per-axis action response, world memory, and visual quality."
- },
- {
   "id": "2606.00793",
   "tag": "ME.7",
   "title": "MBench: A Comprehensive Benchmark on Memory Capability for Video World Models",
@@ -331,60 +313,6 @@
   "cited": 32,
   "tldr_zh": "MIND 提供第一/第三人称、多种动作空间下的 250 段闭环重访视频，评测世界模型的记忆一致性与动作控制，并给出基线。",
   "tldr_en": "MIND offers 250 first- and third-person closed-loop revisit videos across varied action spaces to score memory consistency and action control in world models, with a MIND-World baseline."
- },
- {
-  "id": "2605.03941",
-  "tag": "ME.8",
-  "title": "iWorld-Bench: A Benchmark for Interactive World Models with a Unified Action Generation Framework",
-  "short": "iWorld-Bench",
-  "authors": "Jianjie Fang et al.",
-  "date": "2026-05",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2605.03941",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 16,
-  "tldr_zh": "用动作生成框架统一不同交互方式，设计 6 类共 4.9k 个测试样本，评测 14 个世界模型的画质、轨迹跟随和往返回访记忆。",
-  "tldr_en": "iWorld-Bench uses an action generation framework to unify differing interaction modalities, then evaluates 14 world models on 4.9k test samples across six task types covering visual quality, trajectory following, and memory."
- },
- {
-  "id": "2605.25874",
-  "tag": "ME.9",
-  "title": "WBench: A Comprehensive Multi-turn Benchmark for Interactive Video World Model Evaluation",
-  "short": "WBench",
-  "authors": "Kaining Ying et al.",
-  "date": "2026-05",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2605.25874",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 38,
-  "tldr_zh": "WBench 以 289 个多轮交互用例和 22 个子指标，从画质、设定遵循、交互遵循、一致性和物理五维评测交互视频世界模型。",
-  "tldr_en": "WBench evaluates interactive video world models on 289 multi-turn cases with 22 sub-metrics across quality, setting adherence, interaction adherence, consistency, and physics."
- },
- {
-  "id": "2606.31672",
-  "tag": "ME.12",
-  "title": "WorldRoamBench: An Open-World Benchmark for Long-Horizon Stability of Interactive World Models",
-  "short": "WorldRoamBench",
-  "authors": "Ting-Bing Xu et al.",
-  "date": "2026-06",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2606.31672",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 10,
-  "tldr_zh": "用千余个 10–60 秒连续操控用例，从动作、视觉漂移、物理和记忆四维评测交互世界模型的长程稳定性。",
-  "tldr_en": "WorldRoamBench tests long-horizon stability of interactive world models over 1,000+ cases of 10–60 s WASD control, covering per-frame action, drift, physics, and trajectory-aware scene and subject memory."
  },
  {
   "id": "2608.27328",
@@ -1660,7 +1588,7 @@
  },
  {
   "id": "2605.24630",
-  "tag": "MA.Video.12",
+  "tag": "MA.WA.36",
   "title": "DexSIM: Real-time Dexterous Simulation with Unified Causal Video Diffusion",
   "short": "DexSIM",
   "authors": "Adam Lee",
@@ -1698,7 +1626,7 @@
  },
  {
   "id": "2607.28243",
-  "tag": "MA.Video.23",
+  "tag": "MA.WA.37",
   "title": "EgoGenesis: Egocentric World-Action Modeling with Online Anchored Projective Memory and Action-3D RoPE",
   "short": "EgoGenesis",
   "authors": "Zexuan Yan et al.",
@@ -2007,7 +1935,7 @@
  },
  {
   "id": "2510.10125",
-  "tag": "MA.Video.1",
+  "tag": "MA.WA.33",
   "title": "Ctrl-World: A Controllable Generative World Model for Robot Manipulation",
   "short": "Ctrl-World",
   "authors": "Yanjiang Guo et al.",
@@ -2026,7 +1954,7 @@
  },
  {
   "id": "2606.18960",
-  "tag": "MA.Video.18",
+  "tag": "MA.WA.34",
   "title": "Mem-World: Memory-Augmented Action-Conditioned World Models for Persistent Robot Manipulation",
   "short": "Mem-World",
   "authors": "Zirui Zheng et al.",
@@ -2045,7 +1973,7 @@
  },
  {
   "id": "2610.14583",
-  "tag": "MA.Video.28",
+  "tag": "MA.WA.35",
   "title": "Remembering What Matters for Long-Horizon Robotic World Models",
   "short": "ReCAP",
   "authors": "Hao Wu et al.",
@@ -2114,8 +2042,7 @@
   "url": "https://arxiv.org/abs/2503.19325",
   "role": "core",
   "tags": [
-   "memory",
-   "wm"
+   "memory"
   ],
   "cited": 130,
   "tldr_zh": "建立逐帧自回归视频建模基线FAR，并利用远帧主要充当上下文记忆的冗余，对远帧用大核非对称分块压缩token、近帧保留细节，降低长视频训练开销。",
@@ -2166,7 +2093,8 @@
   "url": "https://arxiv.org/abs/2506.01799",
   "role": "core",
   "tags": [
-   "memory"
+   "memory",
+   "wm"
   ],
   "cited": 31,
   "tldr_zh": "从360度全景出发沿预设短轨迹迭代生成视频以扩展场景，用场景记忆为每段视频检索最相关的历史视角作条件，最后融合为三维高斯场景。",
@@ -2649,24 +2577,6 @@
   "tldr_en": "Exploits the fact that an action sequence followed by its inverse must return to the starting state, turning closed action cycles into annotation-free RL rewards for spatial closure and cross-cycle consistency, and releases CycleBench to diagnose whether world models can return to earlier states."
  },
  {
-  "id": "2608.13552",
-  "tag": "ME.18",
-  "title": "PlayWorld: Benchmarking World Models with Agent Players over Long-Horizon Objectives",
-  "short": "PlayWorld",
-  "authors": "Kai Ding et al.",
-  "date": "2026-08",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2608.13552",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 5,
-  "tldr_zh": "用多模态智能体玩家为不同世界模型自行规划动作以完成长程目标，从几何一致性、交互保真、视野外演化与视野内演化等维度比较交互式视频世界模型。",
-  "tldr_en": "Uses multimodal agent players to pursue long-horizon objectives in each world model with their own action sequences, comparing interactive video world models on geometric consistency, interaction fidelity, and state evolution both in and out of view."
- },
- {
   "id": "2608.13546",
   "tag": "ML.Objective.5",
   "title": "Alaya-EVOKE: From Linear-Scaling Supervision to Endless World",
@@ -2738,7 +2648,7 @@
  },
  {
   "id": "2608.28460",
-  "tag": "MR.Implicit.27",
+  "tag": "ML.Aware.7",
   "title": "LayerRecall: A State-Conditioned Memory Router for Long-Horizon Consistency in Video Generation",
   "short": "LayerRecall",
   "authors": "Yixuan Ding et al.",
@@ -3026,7 +2936,7 @@
  },
  {
   "id": "2609.38839",
-  "tag": "MR.Visual.21",
+  "tag": "ML.Aware.8",
   "title": "FrameMorrow: Future-guided Frame Selection with Prospective Tokens for Long-Horizon Video Generation",
   "short": "FrameMorrow",
   "authors": "Bo Yin et al.",
@@ -3044,7 +2954,7 @@
  },
  {
   "id": "2610.02153",
-  "tag": "MR.Implicit.29",
+  "tag": "ML.Aware.6",
   "title": "MosaiChunk: Compositing Spatio-Temporal Memory for Autoregressive Video Generation",
   "short": "MosaiChunk",
   "authors": "Yi-Wen Zhang et al.",
@@ -3059,24 +2969,6 @@
   "cited": 1,
   "tldr_zh": "冻结视频生成器，只训练轻量路由器在固定活跃记忆预算下从时空历史中挑选KV片段拼成马赛克，以恢复重现内容的细节，并构建回访基准RememBench。",
   "tldr_en": "Keeps the video generator frozen and trains a lightweight router that picks historical KV sections across space and time into a mosaic under a fixed memory budget, and introduces RememBench for long-horizon revisits."
- },
- {
-  "id": "2610.02205",
-  "tag": "ME.23",
-  "title": "PROWBench: Do Video Models Render What the Program Specifies?",
-  "short": "PROWBench",
-  "authors": "Zheng-Hui Huang et al.",
-  "date": "2026-10",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2610.02205",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 3,
-  "tldr_zh": "以程序化构建的场景记录实体状态与带时间戳的事件（含视野外事件），据此检验生成视频是否遵循程序设定，评测实体控制、长程记忆与事件渲染。",
-  "tldr_en": "Builds programmatic episodes that log entity states and timestamped events, including those outside the camera view, and checks generated videos against them for entity control, long-horizon memory, and faithful rendering of scheduled events."
  },
  {
   "id": "2610.01614",
@@ -3315,7 +3207,7 @@
  },
  {
   "id": "2610.23423",
-  "tag": "MR.Explicit.27",
+  "tag": "MR.Visual.33",
   "title": "Momentum: Persistent Dynamics for Video World Models",
   "short": "Momentum",
   "authors": "N. Savov et al.",
@@ -3940,23 +3832,6 @@
   "tldr_en": "Generates perpetual 3D view sequences by outpainting along a camera trajectory, customizing the outpainter with a hierarchical scene concept graph refined as new views arrive and with test-time training to curb semantic drift."
  },
  {
-  "id": "2508.00144",
-  "tag": "ME.28",
-  "title": "World Consistency Score: A Unified Metric for Video Generation Quality",
-  "short": "WCS",
-  "authors": "Akshat Rakheja et al.",
-  "date": "2025-07",
-  "venue": "arXiv 2025",
-  "url": "https://arxiv.org/abs/2508.00144",
-  "role": "core",
-  "tags": [
-   "memory"
-  ],
-  "cited": 7,
-  "tldr_zh": "提出生成视频的世界一致性指标，组合物体恒存、关系稳定、因果合规与闪烁惩罚四个子项，并用人类偏好数据学习权重。",
-  "tldr_en": "Proposes a world-consistency metric for generated videos that combines object permanence, relation stability, causal compliance and a flicker penalty, with weights learned from human preference data."
- },
- {
   "id": "2509.06579",
   "tag": "MR.Implicit.50",
   "title": "CausNVS: Autoregressive Multi-view Diffusion for Flexible 3D Novel View Synthesis",
@@ -4009,18 +3884,6 @@
   "cited": 2,
   "tldr_zh": "视频规划框架在操作失败后从交互视频中优化一个刻画隐藏物理属性的潜嵌入，并用拒绝采样剔除与以往失败相矛盾的候选计划，使重规划利用此前试错揭示的信息。",
   "tldr_en": "A video-planning framework that, after a failed attempt, optimizes a latent embedding capturing hidden physical properties from interaction videos and rejects candidate plans inconsistent with earlier failures, so replanning builds on what trial and error revealed."
- },
- {
-  "id": "2510.20668",
-  "title": "From Masks to Worlds: A Hitchhiker's Guide to World Models",
-  "authors": "Jinbin Bai et al.",
-  "date": "2025-10",
-  "venue": "arXiv 2025",
-  "url": "https://arxiv.org/abs/2510.20668",
-  "role": "survey",
-  "cited": 7,
-  "tldr_zh": "不求罗列所有世界模型，而是沿一条主线梳理：从统一多模态表示的掩码模型，到共享单一范式的统一架构，再到闭合动作—感知回路的交互式生成模型，最后到让世界长期保持一致的记忆增强系统。",
-  "tldr_en": "A guide rather than a catalog, following one path from masked models that unified representation learning across modalities, through unified architectures and interactive generative models that close the action-perception loop, to memory-augmented systems that keep worlds consistent over time."
  },
  {
   "id": "2510.20726",
@@ -4502,7 +4365,7 @@
  },
  {
   "id": "2604.22152",
-  "tag": "MA.Video.43",
+  "tag": "MA.WA.38",
   "title": "dWorldEval: Scalable Robotic Policy Evaluation via Discrete Diffusion World Model",
   "short": "dWorldEval",
   "authors": "Yaxuan Li et al.",
@@ -4893,7 +4756,7 @@
  },
  {
   "id": "2607.02642",
-  "tag": "MA.Video.50",
+  "tag": "MA.WA.39",
   "title": "GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation",
   "short": "GigaWorld-1",
   "authors": "GigaWorld Team et al.",
@@ -4995,24 +4858,6 @@
   "tldr_en": "In Self Forcing the historical KV cache is frozen rollout state, so future losses never shape how earlier latents are written into keys and values; a gradient-free rollout first records the self-generated context, then the context KV and causal attention are recomputed in parallel so future losses train the memory writing."
  },
  {
-  "id": "2608.02603",
-  "tag": "ME.30",
-  "title": "WorldExam: Benchmarking World Models from Apparent Appearance to Inherent Reactivity",
-  "short": "WorldExam",
-  "authors": "Yuxue Yang et al.",
-  "date": "2026-08",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2608.02603",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm"
-  ],
-  "cited": 5,
-  "tldr_zh": "面向可控视频世界模型的分层诊断基准，涵盖画质、控制遵循、空间一致与世界反应四层，其中场景重访用往返相机运动检验模型对初始观测的空间记忆。",
-  "tldr_en": "A hierarchical diagnostic benchmark for controllable video world models spanning visual quality, control adherence, spatial consistency and world reactivity, where a scene-revisit task uses round-trip camera motion to probe spatial memory of the initial view."
- },
- {
   "id": "2608.23383",
   "tag": "MA.Video.44",
   "title": "Long-Horizon Audio-Visual Generation for Persistent Stories and Interactive Worlds",
@@ -5051,7 +4896,7 @@
  },
  {
   "id": "2608.26200",
-  "tag": "MA.WA.25",
+  "tag": "MA.Video.51",
   "title": "GameWAM: A World Action Model for Video Games",
   "short": "GameWAM",
   "authors": "Yun-Cheng Guo et al.",
@@ -5069,7 +4914,7 @@
  },
  {
   "id": "2608.26239",
-  "tag": "MA.Video.45",
+  "tag": "MA.WA.40",
   "title": "WALL-SS: Scaling Long-horizon World Models via Next-Scale Autoregression",
   "short": "WALL-SS",
   "authors": "Maeve Zhang et al.",
@@ -5105,7 +4950,7 @@
  },
  {
   "id": "2609.14462",
-  "tag": "MR.Explicit.41",
+  "tag": "MR.Visual.34",
   "title": "AlayaVista: Streaming World Modeling from Panoramic States to Perspective Video",
   "short": "AlayaVista",
   "authors": "Jia-Ming Tan et al.",
@@ -5118,8 +4963,8 @@
    "wm"
   ],
   "cited": 3,
-  "tldr_zh": "把全景世界演化与透视观测合成解耦，先由单张图像扩展出360度场景先验，再以相机为条件分块自回归演化全景隐状态，由隐空间视口渲染器和细化器输出透视视频。",
-  "tldr_en": "Decouples panoramic world evolution from perspective rendering: a single image is expanded into a 360-degree scene prior, a camera-conditioned panoramic latent state evolves chunk by chunk, and a latent viewport renderer plus refiner produces the perspective video."
+  "tldr_zh": "把全景世界演化与透视观测合成解耦：以相机为条件分块演化全景视频的VAE latent，由隐空间视口渲染器和细化器输出透视视频，持续保存完整方向的视觉上下文。",
+  "tldr_en": "Evolves camera-conditioned panoramic video VAE latents chunk by chunk, then renders and refines the requested perspective viewport while retaining full-sphere visual context."
  },
  {
   "id": "2609.16697",
@@ -5191,7 +5036,7 @@
  },
  {
   "id": "2609.22858",
-  "tag": "MR.Explicit.43",
+  "tag": "MA.WA.42",
   "title": "PileBelief: Persistent Physical State for Interaction-Driven World Modeling",
   "short": "PileBelief",
   "authors": "Hong-Yi Lin et al.",
@@ -5207,25 +5052,6 @@
   "cited": 0,
   "tldr_zh": "针对部分可观测的挖掘场景，在观测条件物理先验之上加入按世界坐标寻址的形变记忆与物理响应记忆，以与动作对齐的读取和门控残差修正地形变化与结果预测；已完成的交互更新实测信念，假设动作则推进独立的想象状态。",
   "tldr_en": "For partially observed excavation, adds world-addressed deformation memory and physical-response memory on top of an observation-conditioned physical prior; action-aligned reads and gated residuals refine terrain-change and outcome predictions, with executed scoops updating the measured belief and hypothetical ones advancing a separate imagined state."
- },
- {
-  "id": "2609.24308",
-  "tag": "ME.31",
-  "title": "HappyWorld-Bench",
-  "short": "HappyWorld-Bench",
-  "authors": "Zhi-Qi Bai et al.",
-  "date": "2026-09",
-  "venue": "arXiv 2026",
-  "url": "https://arxiv.org/abs/2609.24308",
-  "role": "core",
-  "tags": [
-   "memory",
-   "wm",
-   "emb"
-  ],
-  "cited": 0,
-  "tldr_zh": "按从生成构建到统一世界建模的六级能力框架，分视频、空间与具身世界模型三条赛道评测生成世界在探索、交互与修改下的可靠性，结合人类对比Elo与自动指标，考察长推演与重访中的一致性及多步动作下的状态保持。",
-  "tldr_en": "A benchmark that grades world models on a six-level capability ladder across video, spatial and embodied tracks, pairing human A/B Elo with automatic metrics to test whether generated worlds stay consistent over long rollouts and revisits and keep state across multi-step actions."
  },
  {
   "id": "2609.25652",
@@ -5357,7 +5183,7 @@
  },
  {
   "id": "2610.01019",
-  "tag": "MA.Video.46",
+  "tag": "MA.WA.41",
   "title": "FutureWorlds: Learning Robotic World Models from Alternative Futures",
   "short": "FutureWorlds",
   "authors": "Hao Wu et al.",
@@ -5561,7 +5387,7 @@
  },
  {
   "id": "2610.23968",
-  "tag": "MR.Explicit.45",
+  "tag": "MA.WA.43",
   "title": "IMPULSE: Push First, Then Predict in V-JEPA 2 Feature Space",
   "short": "IMPULSE",
   "authors": "Ting-An Jin",
@@ -5651,5 +5477,242 @@
   "cited": 0,
   "tldr_zh": "在同一混合Transformer中同步去噪视频、动作与语言，每步生成子任务与文本记忆并在下一步重新读入，形成以语言为记忆的闭环，并用带纠正的流匹配训练动作从扰动轨迹中恢复。",
   "tldr_en": "Co-denoises video, action, and language in one mixture-of-transformers backbone, generating subtasks and textual memory each step and feeding them back at the next to close a language-as-memory loop, with flow matching with correction teaching the action head to recover from perturbed trajectories."
+ },
+ {
+  "id": "2610.19683",
+  "tag": "MR.Implicit.51",
+  "title": "Enhancing Latent World Models with Associative Memory",
+  "short": "AM-LWM",
+  "authors": "Yuwei Sun et al.",
+  "date": "2026-10",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2610.19683",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm",
+   "emb"
+  ],
+  "cited": 0,
+  "tldr_zh": "为JEPA式隐空间世界模型加入内容寻址记忆库，在多时间尺度读取历史，并用槽位多样性与时间使用均衡损失训练记忆，用于长程规划。",
+  "tldr_en": "Augments a JEPA-style latent world model with a content-addressable memory bank read across temporal scales, trained with slot-diversity and temporal-utilization losses for long-horizon planning."
+ },
+ {
+  "id": "2610.30125",
+  "tag": "MR.Implicit.52",
+  "title": "PhysiCalWorld: In-Context Physics Calibration for World Models",
+  "short": "PhysiCalWorld",
+  "authors": "Yunhao Luo et al.",
+  "date": "2026-10",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2610.30125",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm",
+   "emb"
+  ],
+  "cited": 0,
+  "tldr_zh": "把测试场景中探索交互的历史片段编码成紧凑物理描述token，后续动作条件预测反复读取该token，以保留当前画面无法确定的质量、阻尼或摩擦等动力学信息。",
+  "tldr_en": "Encodes a test-scene exploratory interaction clip into a reusable physics descriptor token, conditioning later action-driven predictions on dynamics that the current frame cannot identify."
+ },
+ {
+  "id": "2610.30988",
+  "tag": "MA.WA.44",
+  "title": "In-Context Learning World Models for Robot Dual-Arm Manipulation of Soft Garment with Partial Observations",
+  "short": "Soft-Object WM",
+  "authors": "Hengyi Sim et al.",
+  "date": "2026-10",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2610.30988",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm",
+   "emb"
+  ],
+  "tldr_zh": "用可变长度的历史局部点云作上下文，推断衣物的完整形状与材料属性并预测双臂动作后的形变，在不更新权重的情况下泛化到新衣物与机器人。",
+  "tldr_en": "Conditions full-state estimation and action-driven garment prediction on a variable-length history of partial point clouds, inferring shape and material properties without updating weights."
+ },
+ {
+  "id": "2610.28554",
+  "tag": "MR.Visual.35",
+  "title": "OverSeer: Multi-Agent World Models Beyond What Agents See",
+  "short": "OverSeer",
+  "authors": "Runjia Li et al.",
+  "date": "2026-10",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2610.28554",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 0,
+  "tldr_zh": "在多智能体视角之外联合预测固定机位辅助视频，使视野外场景持续被表示；以保留参考图像的delta-VAE压缩辅助流，并评测重聚与离场动态事件。",
+  "tldr_en": "Jointly predicts fixed-camera auxiliary video streams alongside agent views to represent off-screen scenes, using a reference-conditioned delta-VAE for compression and evaluating reunions and off-screen events."
+ },
+ {
+  "id": "2610.28827",
+  "tag": "MR.Explicit.48",
+  "title": "WorldStream: Streaming Interactive 3D Worlds with Hierarchical Planning and Persistent State",
+  "short": "WorldStream",
+  "authors": "Xiaoxiao Ma et al.",
+  "date": "2026-10",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2610.28827",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 0,
+  "tldr_zh": "以层级规划扩展可交互三维世界，把区域计划、种子、实体身份和编辑写入持久记录；局部程序生成几何并更新状态，卸载区域在重访时由记录重建。",
+  "tldr_en": "Expands an interactive 3D world through hierarchical planning and persistent records of plans, seeds, identities and edits; local programs construct geometry and update state, and revisits reconstruct unloaded regions from those records."
+ },
+ {
+  "id": "2604.21686",
+  "tag": "ME.6",
+  "title": "WorldMark: A Unified Benchmark Suite for Interactive Video World Models",
+  "short": "WorldMark",
+  "authors": "Xiaojie Xu et al.",
+  "date": "2026-04",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2604.21686",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 23,
+  "tldr_zh": "统一不同世界模型的动作接口，在500个用例中测动作响应与记忆；v2专设回访协议，以累积光流匹配去程和返程画面，并对执行失败的片段门控后比较历史场景是否保持。",
+  "tldr_en": "Unifies world-model action interfaces across 500 cases; its v2 revisit protocol matches outbound and return views by accumulated optical flow, gates invalid action segments, and scores preservation of previously observed scenes."
+ },
+ {
+  "id": "2605.25874",
+  "tag": "ME.9",
+  "title": "WBench: A Comprehensive Multi-turn Benchmark for Interactive Video World Model Evaluation",
+  "short": "WBench",
+  "authors": "Kaining Ying et al.",
+  "date": "2026-05",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2605.25874",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 38,
+  "tldr_zh": "以289个多轮交互用例和22个子指标综合评测视频世界模型；空间记忆子项定位往返轨迹的返回帧，与初始画面比较，并用运动门控排除静止视频的虚高得分。",
+  "tldr_en": "Evaluates video world models with 289 multi-turn cases and 22 sub-metrics; its spatial-memory test locates the return frame of round trips, compares it with the initial view, and uses a motion gate to penalize static-video shortcuts."
+ },
+ {
+  "id": "2605.03941",
+  "tag": "ME.8",
+  "title": "iWorld-Bench: A Benchmark for Interactive World Models with a Unified Action Generation Framework",
+  "short": "iWorld-Bench",
+  "authors": "Jianjie Fang et al.",
+  "date": "2026-05",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2605.03941",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 16,
+  "tldr_zh": "用动作生成框架统一不同交互方式，设计 6 类共 4.9k 个测试样本，评测 14 个世界模型的画质、轨迹跟随和往返回访记忆。",
+  "tldr_en": "iWorld-Bench uses an action generation framework to unify differing interaction modalities, then evaluates 14 world models on 4.9k test samples across six task types covering visual quality, trajectory following, and memory."
+ },
+ {
+  "id": "2608.02603",
+  "tag": "ME.30",
+  "title": "WorldExam: Benchmarking World Models from Apparent Appearance to Inherent Reactivity",
+  "short": "WorldExam",
+  "authors": "Yuxue Yang et al.",
+  "date": "2026-08",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2608.02603",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 5,
+  "tldr_zh": "面向可控视频世界模型的分层诊断基准，涵盖画质、控制遵循、空间一致与世界反应四层，其中场景重访用往返相机运动检验模型对初始观测的空间记忆。",
+  "tldr_en": "A hierarchical diagnostic benchmark for controllable video world models spanning visual quality, control adherence, spatial consistency and world reactivity, where a scene-revisit task uses round-trip camera motion to probe spatial memory of the initial view."
+ },
+ {
+  "id": "2609.24308",
+  "tag": "ME.31",
+  "title": "HappyWorld-Bench",
+  "short": "HappyWorld-Bench",
+  "authors": "Zhi-Qi Bai et al.",
+  "date": "2026-09",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2609.24308",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm",
+   "emb"
+  ],
+  "cited": 0,
+  "tldr_zh": "按从生成构建到统一世界建模的六级能力框架，分视频、空间与具身世界模型三条赛道评测生成世界在探索、交互与修改下的可靠性，结合人类对比Elo与自动指标，考察长推演与重访中的一致性及多步动作下的状态保持。",
+  "tldr_en": "A benchmark that grades world models on a six-level capability ladder across video, spatial and embodied tracks, pairing human A/B Elo with automatic metrics to test whether generated worlds stay consistent over long rollouts and revisits and keep state across multi-step actions."
+ },
+ {
+  "id": "2606.31672",
+  "tag": "ME.12",
+  "title": "WorldRoamBench: An Open-World Benchmark for Long-Horizon Stability of Interactive World Models",
+  "short": "WorldRoamBench",
+  "authors": "Ting-Bing Xu et al.",
+  "date": "2026-06",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2606.31672",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 10,
+  "tldr_zh": "用千余个10–60秒连续操控用例评测交互世界模型；记忆子项按实际回访时刻对齐前后点云，度量已见几何的保留与幻觉，并单独测试主体身份与外观保持。",
+  "tldr_en": "Tests interactive world models over 1,000+ continuous-control cases; its memory protocol aligns observation and revisit point clouds to measure retained versus hallucinated geometry and separately scores subject identity and appearance preservation."
+ },
+ {
+  "id": "2608.13552",
+  "tag": "ME.18",
+  "title": "PlayWorld: Benchmarking World Models with Agent Players over Long-Horizon Objectives",
+  "short": "PlayWorld",
+  "authors": "Kai Ding et al.",
+  "date": "2026-08",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2608.13552",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 5,
+  "tldr_zh": "用多模态智能体玩家为不同世界模型自行规划动作以完成长程目标，从几何一致性、交互保真、视野外演化与视野内演化等维度比较交互式视频世界模型。",
+  "tldr_en": "Uses multimodal agent players to pursue long-horizon objectives in each world model with their own action sequences, comparing interactive video world models on geometric consistency, interaction fidelity, and state evolution both in and out of view."
+ },
+ {
+  "id": "2610.02205",
+  "tag": "ME.23",
+  "title": "PROWBench: Do Video Models Render What the Program Specifies?",
+  "short": "PROWBench",
+  "authors": "Zheng-Hui Huang et al.",
+  "date": "2026-10",
+  "venue": "arXiv 2026",
+  "url": "https://arxiv.org/abs/2610.02205",
+  "role": "core",
+  "tags": [
+   "memory",
+   "wm"
+  ],
+  "cited": 3,
+  "tldr_zh": "以程序化构建的场景记录实体状态与带时间戳的事件（含视野外事件），据此检验生成视频是否遵循程序设定，评测实体控制、长程记忆与事件渲染。",
+  "tldr_en": "Builds programmatic episodes that log entity states and timestamped events, including those outside the camera view, and checks generated videos against them for entity control, long-horizon memory, and faithful rendering of scheduled events."
  }
 ]
